@@ -1,9 +1,6 @@
 package com.objects.marketbridge.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,16 +16,18 @@ public class ProdOrderDetail extends BaseEntity{
     @Column(name = "prod_order_detail_id")
     private Long id;
 
-    // TODO
-    private Long orderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prod_order_id")
+    private ProdOrder orderId;
 
-    // TODO
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product productId;
 
     private Long price;
 
     @Builder
-    private ProdOrderDetail(Long orderId, Long productId, Long price) {
+    private ProdOrderDetail(ProdOrder orderId, Product productId, Long price) {
         this.orderId = orderId;
         this.productId = productId;
         this.price = price;

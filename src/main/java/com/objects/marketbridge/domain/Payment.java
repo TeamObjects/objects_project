@@ -16,9 +16,11 @@ public class Payment extends BaseEntity {
     @Column(name = "payment_id")
     private Long id;
 
-    // TODO
-    private Long orderId;
+    @ManyToOne
+    @JoinColumn(name = "prod_order_id")
+    private ProdOrder orderId;
 
+    //TODO : receipt가 테이블인지 아니면 그냥 텍스트인지 의문
     private String receiptId;
 
     @Enumerated(EnumType.STRING)
@@ -30,11 +32,14 @@ public class Payment extends BaseEntity {
     // 카드사
     private String pg;
 
+    //TODO : 서드 파티 결제 API가 보내주는 컬럼들 추가해야함
+
+
     @Enumerated(EnumType.STRING)
     private StatusCodeType status;
 
     @Builder
-    private Payment(Long orderId, String receiptId, PayMethod payMethod, String payNum, String pg, StatusCodeType status) {
+    private Payment(ProdOrder orderId, String receiptId, PayMethod payMethod, String payNum, String pg, StatusCodeType status) {
         this.orderId = orderId;
         this.receiptId = receiptId;
         this.payMethod = payMethod;
