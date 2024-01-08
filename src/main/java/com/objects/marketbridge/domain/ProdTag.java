@@ -16,7 +16,7 @@ public class ProdTag extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "tag_id")
+    @Column(name = "prog_tag_id")
     private Long id;
     // TODO
     private Long tagId;

@@ -1,5 +1,6 @@
 package com.objects.marketbridge.domain;
 
+import com.objects.marketbridge.domain.order.entity.ProdOrder;
 import com.objects.marketbridge.domain.order.entity.StatusCodeType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

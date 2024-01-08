@@ -19,22 +19,23 @@ public class Qna extends BaseEntity {
     private Long id;
 
     // TODO
-//    @AttributeOverride()  : 중복 클래스 적용
+    // @AttributeOverride()  : 중복 클래스 적용
     private Long userCustomerId; //userId
     // TODO
     // @AttributeOverride()
     private Long userSellerId; //userId
 
     @Enumerated(EnumType.STRING)
-    private ContentType boardType;
+    private ContentType contentType;
 
     private String content;
 
     @Builder
-    private Qna(Long userCustomerId, Long userSellerId, ContentType boardType, String content) {
+    private Qna(Long userCustomerId, Long userSellerId, ContentType contentType, String content) {
         this.userCustomerId = userCustomerId;
         this.userSellerId = userSellerId;
-        this.boardType = boardType;
+        this.contentType = contentType;
         this.content = content;
     }
+
 }
