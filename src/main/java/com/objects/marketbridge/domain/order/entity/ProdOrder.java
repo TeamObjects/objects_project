@@ -1,5 +1,6 @@
-package com.objects.marketbridge.domain;
+package com.objects.marketbridge.domain.order.entity;
 
+import com.objects.marketbridge.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

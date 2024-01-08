@@ -1,5 +1,6 @@
-package com.objects.marketbridge.domain;
+package com.objects.marketbridge.domain.order.entity;
 
+import com.objects.marketbridge.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProdOrderDetail extends BaseEntity{
+public class ProdOrderDetail extends BaseEntity {
 
     @Id
     @GeneratedValue
