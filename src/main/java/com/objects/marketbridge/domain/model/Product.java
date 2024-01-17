@@ -53,7 +53,7 @@ public class Product extends BaseEntity{
         this.discountRate = discountRate;
     }
 
-    @Builder
+//    @Builder
 //    public Product(Category categoryId, boolean isOwn, String name, Long price, boolean isSubs, String thumbImg, Long discountRate, Long stock) {
 //        this.categoryId = categoryId;
 //        this.isOwn = isOwn;

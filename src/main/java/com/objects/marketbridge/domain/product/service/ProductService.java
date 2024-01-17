@@ -30,6 +30,7 @@ public class ProductService {
                 .name(productRequestDto.getName())
                 .price(productRequestDto.getPrice())
                 .isSubs(productRequestDto.getIsSubs())
+                .stock(productRequestDto.getStock())
                 .thumbImg(productRequestDto.getThumbImg())
                 .discountRate(productRequestDto.getDiscountRate())
                 .build();
