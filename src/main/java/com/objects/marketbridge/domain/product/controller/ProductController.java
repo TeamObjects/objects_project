@@ -7,6 +7,7 @@ import com.objects.marketbridge.domain.product.dto.ProductRequestDto;
 import com.objects.marketbridge.domain.product.dto.ProductResponseDto;
 import com.objects.marketbridge.domain.product.service.ProductService;
 import com.objects.marketbridge.global.common.ApiResponse;
+import com.objects.marketbridge.global.security.annotation.UserAuthorize;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,20 +21,21 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @UserAuthorize
     @PostMapping("/products")
     public ApiResponse<ProductResponseDto> registerProduct(@Valid @RequestBody ProductRequestDto productRequestDto) {
 
-//        ProductResponseDto productResponseDto = new ProductResponseDto(
-//                productRequestDto.getCategoryId(),
-//                productRequestDto.getIsOwn(),
-//                productRequestDto.getName(),
-//                productRequestDto.getPrice(),
-//                productRequestDto.getIsSubs(),
-//                productRequestDto.getStock(),
-//                productRequestDto.getThumbImg(),
-//                productRequestDto.getDiscountRate());
+        ProductResponseDto productResponseDto = new ProductResponseDto(
+                productRequestDto.getCategoryId(),
+                productRequestDto.getIsOwn(),
+                productRequestDto.getName(),
+                productRequestDto.getPrice(),
+                productRequestDto.getIsSubs(),
+                productRequestDto.getStock(),
+                productRequestDto.getThumbImg(),
+                productRequestDto.getDiscountRate());
 
-        ProductResponseDto productResponseDto = new ProductResponseDto();
+//        ProductResponseDto productResponseDto = new ProductResponseDto();
 
         productService.registerProduct(productRequestDto);
 

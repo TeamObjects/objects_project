@@ -22,7 +22,7 @@ public class Product extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    private Category category;
 
     @OneToMany(mappedBy = "product")
     private List<ProdOrderDetail> prodOrderDetails = new ArrayList<>();
@@ -40,8 +40,8 @@ public class Product extends BaseEntity{
     private Long discountRate;
 
     @Builder
-    public Product(Category categoryId, List<ProdOrderDetail> prodOrderDetails, String productNo, Boolean isOwn, String name, Long price, Boolean isSubs, Long stock, String thumbImg, Long discountRate) {
-        this.categoryId = categoryId;
+    public Product(Category category, List<ProdOrderDetail> prodOrderDetails, String productNo, Boolean isOwn, String name, Long price, Boolean isSubs, Long stock, String thumbImg, Long discountRate) {
+        this.category = category;
         this.prodOrderDetails = prodOrderDetails;
         this.productNo = productNo;
         this.isOwn = isOwn; // 로켓 true , 오픈 마켓 false
