@@ -1,6 +1,7 @@
 package com.objects.marketbridge.domain.member.controller;
 
 
+import com.objects.marketbridge.domain.member.dto.MemberCouponDto;
 import com.objects.marketbridge.domain.member.dto.SignUpDto;
 import com.objects.marketbridge.domain.member.dto.SignInDto;
 import com.objects.marketbridge.domain.member.dto.FindPointDto;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -59,5 +62,13 @@ public class MemberController {
 
         FindPointDto memberPoint = memberService.findPointById(id);
         return ApiResponse.of(HttpStatus.OK,"completed",memberPoint);
+    }
+
+    @GetMapping("/coupon/{id}")
+    public ApiResponse<List<MemberCouponDto>> findAllCouponById(@PathVariable Long id){
+
+        List<MemberCouponDto> memberCouponDtos = memberService.showAllMemberCoupons(id);
+
+        return ApiResponse.ok(memberCouponDtos);
     }
 }

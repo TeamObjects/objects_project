@@ -1,6 +1,7 @@
 package com.objects.marketbridge.domain.coupon.repository;
 
 import com.objects.marketbridge.domain.model.Coupon;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +14,8 @@ public class CouponRepositoryImpl implements CouponRepository {
 
     private final CouponJpaRepository couponJpaRepository;
 
-    public Optional<Coupon> findById(Long id) {
-        return couponJpaRepository.findById(id);
+    public Coupon findById(Long id) {
+        return couponJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<Coupon> findAllByIds(List<Long> ids) {
