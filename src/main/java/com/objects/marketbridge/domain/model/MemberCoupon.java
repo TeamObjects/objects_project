@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,20 +22,20 @@ public class MemberCoupon extends BaseEntity {
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member memberId;
+    private Member member;
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "couponId")
-    private Coupon couponId;
+    @JoinColumn(name = "coupon_id")
+    private Coupon coupon;
 
-    private boolean isUsed;
+    private Boolean isUsed;
 
     private LocalDateTime usedDate;
 
     @Builder
-    private MemberCoupon(Member memberId, Coupon couponId, boolean isUsed, LocalDateTime usedDate) {
-        this.memberId = memberId;
-        this.couponId = couponId;
+    private MemberCoupon(Member member, Coupon coupon, boolean isUsed, LocalDateTime usedDate) {
+        this.member = member;
+        this.coupon = coupon;
         this.isUsed = isUsed;
         this.usedDate = usedDate;
     }
