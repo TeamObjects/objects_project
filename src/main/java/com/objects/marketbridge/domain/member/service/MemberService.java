@@ -1,13 +1,13 @@
 package com.objects.marketbridge.domain.member.service;
 
 import com.objects.marketbridge.domain.member.dto.FindPointDto;
+import com.objects.marketbridge.domain.member.dto.MemberCouponDto;
 import com.objects.marketbridge.domain.member.dto.SignUpDto;
-import com.objects.marketbridge.domain.model.Member;
+import com.objects.marketbridge.domain.member.repository.MemberCouponJpaRepository;
+import com.objects.marketbridge.domain.model.*;
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
 import com.objects.marketbridge.global.security.jwt.JwtToken;
 import com.objects.marketbridge.global.security.jwt.JwtTokenProvider;
-import com.objects.marketbridge.domain.model.Membership;
-import com.objects.marketbridge.domain.model.Point;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -18,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -25,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberCouponJpaRepository memberCouponJpaRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -70,5 +74,13 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + id));
 
         return Point.toDto(findMemberWithPoint);
+    }
+
+    public List<MemberCouponDto> showAllMemberCoupons (Long memberId){
+        List<MemberCoupon> couponList = memberCouponJpaRepository.findByIdWithCoupon(memberId);
+
+        return couponList.stream()
+                .map(MemberCouponDto::from)
+                .collect(Collectors.toList());
     }
 }
