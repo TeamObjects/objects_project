@@ -71,11 +71,11 @@ public class MemberController {
         return ApiResponse.of(HttpStatus.OK,"completed",memberPoint);
     }
 
-    @GetMapping("/coupon/{id}")
-    public ApiResponse<List<MemberCouponDto>> findAllCouponById(@PathVariable Long id){
-
-        List<MemberCouponDto> memberCouponDtos = memberService.showAllMemberCoupons(id);
-
-        return ApiResponse.ok(memberCouponDtos);
-    }
+//    @GetMapping("/coupon/{id}")
+//    public ApiResponse<List<MemberCouponDto>> findAllCouponById(@PathVariable Long id){
+//
+//        List<MemberCouponDto> memberCouponDtos = memberService.showAllMemberCoupons(id);
+//
+//        return ApiResponse.ok(memberCouponDtos);
+//    }
 }

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberCouponJpaRepository memberCouponJpaRepository;
+//    private final MemberCouponJpaRepository memberCouponJpaRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -92,11 +92,11 @@ public class MemberService {
         return Point.toDto(findMemberWithPoint);
     }
 
-    public List<MemberCouponDto> showAllMemberCoupons (Long memberId){
-        List<MemberCoupon> couponList = memberCouponJpaRepository.findByIdWithCoupon(memberId);
-
-        return couponList.stream()
-                .map(MemberCouponDto::from)
-                .collect(Collectors.toList());
-    }
+//    public List<MemberCouponDto> showAllMemberCoupons (Long memberId){
+//        List<MemberCoupon> couponList = memberCouponJpaRepository.findByIdWithCoupon(memberId);
+//
+//        return couponList.stream()
+//                .map(MemberCouponDto::from)
+//                .collect(Collectors.toList());
+//    }
 }
