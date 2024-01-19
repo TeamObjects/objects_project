@@ -21,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberCouponJpaRepository memberCouponJpaRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -86,5 +90,13 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + id));
 
         return Point.toDto(findMemberWithPoint);
+    }
+
+    public List<MemberCouponDto> showAllMemberCoupons (Long memberId){
+        List<MemberCoupon> couponList = memberCouponJpaRepository.findByIdWithCoupon(memberId);
+
+        return couponList.stream()
+                .map(MemberCouponDto::from)
+                .collect(Collectors.toList());
     }
 }
