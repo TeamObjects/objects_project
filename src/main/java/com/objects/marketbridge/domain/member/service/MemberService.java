@@ -6,7 +6,6 @@ import com.objects.marketbridge.domain.member.dto.SignInDto;
 import com.objects.marketbridge.domain.member.dto.SignUpDto;
 import com.objects.marketbridge.domain.model.Member;
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.global.security.annotation.GetAuthentication;
 import com.objects.marketbridge.global.security.dto.JwtTokenDto;
 import com.objects.marketbridge.global.security.jwt.JwtTokenProvider;
 import com.objects.marketbridge.domain.model.Membership;
@@ -18,12 +17,9 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
 
 
 @Slf4j
@@ -38,12 +34,12 @@ public class MemberService {
 
     public IsCheckedDto isDuplicateEmail(String email){
         boolean isDuplicateEmail = memberRepository.findByEmail(email).isPresent();
-        return IsCheckedDto.builder().isChecked(isDuplicateEmail).build();
+        return IsCheckedDto.builder().isCheckEmail(isDuplicateEmail).build();
     }
 
     @Transactional
     public void save(SignUpDto signUpDto) throws BadRequestException {
-        boolean isDuplicateEmail = isDuplicateEmail(signUpDto.getEmail()).isChecked();
+        boolean isDuplicateEmail = isDuplicateEmail(signUpDto.getEmail()).checkEmail();
 
         if (isDuplicateEmail) throw new BadRequestException("이미 존재하는 이메일 입니다.");
 

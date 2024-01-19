@@ -6,14 +6,14 @@ import lombok.*;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class IsCheckedDto {
-    private boolean isChecked;
+    private Boolean isCheckEmail;
 
     @Builder
-    public IsCheckedDto(boolean isChecked) {
-        this.isChecked = isChecked;
+    public IsCheckedDto(Boolean isCheckEmail) {
+        this.isCheckEmail = isCheckEmail;
     }
 
-    public boolean isChecked() {
-        return isChecked;
+    public Boolean checkEmail() {
+        return isCheckEmail;
     }
 }

@@ -1,8 +1,6 @@
 package com.objects.marketbridge.domain.order.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.objects.marketbridge.domain.model.Product;
-import com.objects.marketbridge.domain.order.RestDocsSupport;
+import com.objects.marketbridge.RestDocsSupport;
 import com.objects.marketbridge.domain.order.controller.request.OrderCancelRequest;
 import com.objects.marketbridge.domain.order.controller.response.OrderCancelResponse;
 import com.objects.marketbridge.domain.order.controller.response.ProductResponse;
@@ -12,11 +10,7 @@ import com.objects.marketbridge.domain.order.service.OrderCancelService;
 import com.objects.marketbridge.domain.payment.dto.RefundDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
@@ -24,7 +18,6 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;

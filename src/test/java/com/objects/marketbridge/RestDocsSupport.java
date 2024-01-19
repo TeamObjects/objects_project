@@ -1,4 +1,4 @@
-package com.objects.marketbridge.domain.order;
+package com.objects.marketbridge;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

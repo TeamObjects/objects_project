@@ -14,7 +14,8 @@ endif::[]
 
 include::api/order/ordercancel.adoc[]
 
-// [[Order-API]]
-// == Order API
-//
-// include::api/order/ordercancel.adoc[]
+[[Member-API]]
+== Member API
+
+include::api/member/emailcheck.adoc[]
+
