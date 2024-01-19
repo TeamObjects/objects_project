@@ -11,4 +11,8 @@ public interface CouponRepository {
     List<Coupon> findAllByIds(List<Long> ids);
 
     void save(Coupon coupon);
+
+    void saveAll(List<Coupon> coupons);
+
+    List<Coupon> findAll();
 }

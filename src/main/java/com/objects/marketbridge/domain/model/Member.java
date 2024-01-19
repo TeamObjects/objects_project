@@ -17,10 +17,7 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-//    @Enumerated(EnumType.STRING)
     private String socialType;
-
-//    @Enumerated(EnumType.STRING)
     @Setter
     private String membership;
 
@@ -32,19 +29,21 @@ public class Member extends BaseEntity {
 
     private String phoneNo;
 
+    // 알림
+    private Boolean isAlert;
+    // 약관동의
+    private Boolean isAgree;
+
+
+    // 양방향 설정
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
     @OneToOne(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Point point;
 
-    // 알림
-    private boolean isAlert;
-    // 약관동의
-    private boolean isAgree;
-
     @Builder
-    private Member(String socialType, String membership, String email, String password, String name, String phoneNo, boolean isAlert, boolean isAgree) {
+    private Member(String socialType, String membership, String email, String password, String name, String phoneNo, Boolean isAlert, Boolean isAgree) {
         this.socialType = socialType;
         this.membership = membership;
         this.email = email;
@@ -58,6 +57,15 @@ public class Member extends BaseEntity {
     public void changePoint(Point point) {
         this.point = point;
     }
+
+//    public static Member fromDto(CreateMember createMember){
+//        return Member.builder()
+//                .email(createMember.getEmail())
+//                .name(createMember.getName())
+//                .phoneNo(createMember.getPhoneNo())
+//                .password(createMember.getPassword())
+//                .isAgree(createMember.getIsAgree()).build();
+//    }
 }
 
 

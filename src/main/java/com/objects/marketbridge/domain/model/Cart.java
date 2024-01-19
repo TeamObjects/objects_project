@@ -15,25 +15,31 @@ public class Cart extends BaseEntity {
     @Column(name = "cart_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prod_option_id")
-    private ProdOption prodOptionId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member memberId;
 
-    private boolean isSubs;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    private Integer quantity;
+    private Boolean isSubs;
+
+    private Long quantity;
 
     @Builder
-    private Cart(ProdOption prodOptionId, Member memberId, boolean isSubs, Integer quantity) {
-        this.prodOptionId = prodOptionId;
+
+    public Cart(Member memberId, Product product, Boolean isSubs, Long quantity) {
         this.memberId = memberId;
+        this.product = product;
         this.isSubs = isSubs;
         this.quantity = quantity;
     }
 
-    //TODO : 컬럼 채우기 및 엔티티 완성하기
+    //    private Cart(Product product, Member memberId, boolean isSubs, Long quantity) {
+//        this.product = product;
+//        this.memberId = memberId;
+//        this.isSubs = isSubs;
+//        this.quantity = quantity;
+//    }
 }

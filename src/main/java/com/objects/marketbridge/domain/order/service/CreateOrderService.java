@@ -1,117 +1,102 @@
 package com.objects.marketbridge.domain.order.service;
 
-import com.objects.marketbridge.address.repository.AddressRepository;
+import com.objects.marketbridge.domain.address.repository.AddressRepository;
 import com.objects.marketbridge.domain.coupon.repository.CouponRepository;
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
 import com.objects.marketbridge.domain.model.Address;
 import com.objects.marketbridge.domain.model.Coupon;
 import com.objects.marketbridge.domain.model.Member;
 import com.objects.marketbridge.domain.model.Product;
-import com.objects.marketbridge.domain.order.controller.response.CreateOrderResponse;
-import com.objects.marketbridge.domain.order.domain.ProdOrder;
-import com.objects.marketbridge.domain.order.domain.ProdOrderDetail;
-import com.objects.marketbridge.domain.order.domain.StatusCodeType;
-import com.objects.marketbridge.domain.order.dto.CreateProdOrderDetailDto;
-import com.objects.marketbridge.domain.order.dto.CreateProdOrderDto;
+import com.objects.marketbridge.domain.order.dto.CreateOrderDto;
+import com.objects.marketbridge.domain.order.entity.ProdOrder;
+import com.objects.marketbridge.domain.order.entity.ProdOrderDetail;
+import com.objects.marketbridge.domain.order.entity.ProductValue;
+import com.objects.marketbridge.domain.order.entity.StatusCodeType;
 import com.objects.marketbridge.domain.order.service.port.OrderDetailRepository;
 import com.objects.marketbridge.domain.order.service.port.OrderRepository;
-import com.objects.marketbridge.domain.payment.config.TossPaymentConfig;
 import com.objects.marketbridge.domain.product.repository.ProductRepository;
-import com.objects.marketbridge.global.error.EntityNotFoundException;
-import com.objects.marketbridge.global.utils.GroupingHelper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CreateOrderService {
 
-    private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
     private final CouponRepository couponRepository;
     private final AddressRepository addressRepository;
-    private final TossPaymentConfig paymentConfig;
 
 
     @Transactional
-    public CreateOrderResponse create(CreateProdOrderDto prodOrderDto, List<CreateProdOrderDetailDto> prodOrderDetailDtos) {
-        // 1. ProdOrder, ProdOrderDetail 엔티티 생성
-        ProdOrder prodOrder = createProdOrder(prodOrderDto);
-        List<ProdOrderDetail> prodOrderDetails = createProdOrderDetails(prodOrderDetailDtos);
+    public void create(CreateOrderDto createOrderDto) {
 
+        // 1. ProdOrder 생성
+        ProdOrder prodOrder = createProdOrder(createOrderDto);
         orderRepository.save(prodOrder);
 
-        // 2. 양방향관계이므로 양쪽 다 서로의 값을 집어넣어줘야함
-        prodOrderDetails.forEach(prodOrder::addOrderDetail);
-        prodOrderDetails.forEach(p -> p.setOrder(prodOrder));
+        // 2. ProdOrderDetail 생성
+        List<ProdOrderDetail> prodOrderDetails = createProdOrderDetail(createOrderDto);
 
-        // 3.주문 엔티티 저장
+        // 3. ProdOrder - ProdOrderDetail 연관관계 매핑
+        for (ProdOrderDetail orderDetail : prodOrderDetails) {
+            prodOrder.addOrderDetail(orderDetail);
+        }
+        // 4. 영속성 저장
         orderDetailRepository.saveAll(prodOrderDetails);
-
-        Member member = memberRepository.findById(prodOrderDto.getMemberId()).orElseThrow(() -> new EntityNotFoundException("엔티티가 존재하지 않습니다"));
-
-        String email          = member.getEmail();
-        String successUrl     = paymentConfig.getSuccessUrl();
-        String failUrl        = paymentConfig.getFailUrl();
-
-        return CreateOrderResponse.from(prodOrderDto, email, successUrl, failUrl);
     }
 
-    private ProdOrder createProdOrder(CreateProdOrderDto dto) {
+    private ProdOrder createProdOrder(CreateOrderDto createOrderDto) {
 
-        Member member         = memberRepository.findById(dto.getMemberId()).orElseThrow(IllegalArgumentException::new);
-        Address address       = addressRepository.findById(dto.getAddressId());
-        Long totalOrderPrice  = dto.getTotalOrderPrice();
-        String orderName      = dto.getOrderName();
-        String orderNo        = dto.getOrderNo();
+        Member member = memberRepository.findById(createOrderDto.getMemberId()).orElseThrow(EntityNotFoundException::new);
+        Address address = addressRepository.findById(createOrderDto.getAddressId());
+        String orderName = createOrderDto.getOrderName();
+        String orderNo = createOrderDto.getOrderNo();
+        Long totalOrderPrice = createOrderDto.getTotalOrderPrice();
+        Long realOrderPrice = createOrderDto.getRealOrderPrice();
+        Long totalUsedCouponPrice = geTotalCouponPrice(createOrderDto);
 
-        return ProdOrder.create(member, address, orderName, orderNo, totalOrderPrice);
-
+        return ProdOrder.create(member, address, orderName, orderNo, totalOrderPrice, realOrderPrice, totalUsedCouponPrice);
     }
 
-    private List<ProdOrderDetail> createProdOrderDetails(List<CreateProdOrderDetailDto> dtos) {
+    private Long geTotalCouponPrice(CreateOrderDto createOrderDto) {
 
-        // request 에서 Product 를 추출하여 Map 으로 그룹핑
-        Map<Long, Product> productMap = GroupingHelper.groupingByKey(getAllProducts(dtos), Product::getId);
+        List<Coupon> coupons = couponRepository.findAllByIds(createOrderDto.getProductValues().stream().map(ProductValue::getCouponId).filter(Objects::nonNull).collect(Collectors.toList()));
 
-        // request 에서 Coupon 을 추출하여 Map 으로 그룹핑
-        Map<Long, Coupon> couponMap = GroupingHelper.groupingByKey(getAllCoupons(dtos), Coupon::getId);
-
-        return  dtos.stream()
-                .map(d ->
-                        ProdOrderDetail.create(
-                                productMap.get(d.getProductId()),
-                                couponMap.get(d.getUsedCouponId()),
-                                d.getQuantity(),
-                                d.getUnitOrderPrice(),
-                                StatusCodeType.ORDER_INIT.getCode()
-                        )
-                ).toList();
+        return coupons.stream().mapToLong(Coupon::getPrice).sum();
     }
 
-    private List<Coupon> getAllCoupons(List<CreateProdOrderDetailDto> dtos) {
-        return couponRepository.findAllByIds(extractCouponIds(dtos));
-    }
+    private List<ProdOrderDetail> createProdOrderDetail(CreateOrderDto createOrderDto) {
 
-    private List<Product> getAllProducts(List<CreateProdOrderDetailDto> dtos) {
-        return productRepository.findAllById(extractProductIds(dtos));
-    }
+        List<ProdOrderDetail> prodOrderDetails = new ArrayList<>();
 
-    private static List<Long> extractCouponIds(List<CreateProdOrderDetailDto> dtos) {
-        return dtos.stream()
-                .map(CreateProdOrderDetailDto::getUsedCouponId)
-                .toList();
-    }
+        for (ProductValue productValue : createOrderDto.getProductValues()) {
 
-    private static List<Long> extractProductIds(List<CreateProdOrderDetailDto> dtos) {
-        return dtos.stream()
-                .map(CreateProdOrderDetailDto::getProductId)
-                .toList();
+            Product product = productRepository.findById(productValue.getProductId());
+            // 쿠폰이 적용안된 product 가 존재할 경우 그냥 null 저장
+            Coupon coupon = (productValue.getCouponId() != null) ? couponRepository.findById(productValue.getCouponId()) : null ;
+            String orderNo = createOrderDto.getOrderNo();
+            Long quantity = productValue.getQuantity();
+            Long price = product.getPrice();
+
+            // ProdOrderDetail 엔티티 생성
+            ProdOrderDetail prodOrderDetail =
+                    ProdOrderDetail.create(product, orderNo, coupon, quantity, price, StatusCodeType.ORDER_INIT.getCode());
+
+            // prodOrderDetails 에 추가
+            prodOrderDetails.add(prodOrderDetail);
+        }
+
+        return prodOrderDetails;
     }
 }

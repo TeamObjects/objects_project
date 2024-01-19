@@ -25,6 +25,7 @@ public class Address extends BaseEntity{
 
     private boolean isDefault;
 
+
     @Builder
     private Address(Member member, AddressValue addressValue, boolean isDefault) {
         this.member = member;

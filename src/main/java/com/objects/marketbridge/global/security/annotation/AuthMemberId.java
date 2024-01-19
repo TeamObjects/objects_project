@@ -7,10 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.objects.marketbridge.global.security.constants.SecurityConst.*;
+
 @Target({ ElementType.PARAMETER, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAuthority('USER')")
-@AuthenticationPrincipal(expression = "id")
+@PreAuthorize(AUTH_USER)
+@AuthenticationPrincipal(expression = ID)
 public @interface AuthMemberId {
 
 }

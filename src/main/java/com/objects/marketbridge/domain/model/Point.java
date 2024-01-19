@@ -23,9 +23,6 @@ public class Point extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
-    private String pointType;
-
     private Long inPoint;
 
     private Long outPoint;
@@ -38,13 +35,12 @@ public class Point extends BaseEntity {
 
 
     @Builder //order_id 제거
-    private Point(Member member, Long inPoint,String  pointType, Long outPoint, Long balance, String comments) {
+    private Point(Member member, Long inPoint, Long outPoint, Long balance, String comments) {
         this.member = member;
         this.inPoint = inPoint;
         this.outPoint = outPoint;
         this.balance = balance;
         this.comments = comments;
-        this.pointType = pointType;
     }
 
     // 연관관계 편의 메서드 -> Point 쪽에서 한번에 저장
@@ -58,7 +54,6 @@ public class Point extends BaseEntity {
                 .balance(member.getPoint().getBalance())
                 .inPoint(member.getPoint().getInPoint())
                 .outPoint(member.getPoint().getOutPoint())
-                .pointType(member.getPoint().getPointType())
                 .comments(member.getPoint().getComments())
                 .createdAt(member.getPoint().getCreatedAt())
                 .build();

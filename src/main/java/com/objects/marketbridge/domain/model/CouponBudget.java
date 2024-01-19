@@ -15,14 +15,22 @@ public class CouponBudget extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coupon_budget_id")
     private Long id;
-    // TODO
-    private Long memberId;
 
-    private int price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
+    private Long balance;
+
+    private Long outgoing;
+
+    private Long incoming;
 
     @Builder
-    private CouponBudget(Long memberId, int price) {
-        this.memberId = memberId;
-        this.price = price;
+    public CouponBudget(Seller seller, Long balance, Long outgoing, Long incoming) {
+        this.seller = seller;
+        this.balance = balance;
+        this.outgoing = outgoing;
+        this.incoming = incoming;
     }
 }

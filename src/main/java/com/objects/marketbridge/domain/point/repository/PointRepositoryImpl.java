@@ -1,7 +1,7 @@
 package com.objects.marketbridge.domain.point.repository;
 
 import com.objects.marketbridge.domain.model.Point;
-import com.objects.marketbridge.global.error.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +18,7 @@ public class PointRepositoryImpl implements PointRepository {
 
     @Override
     public Point findById(Long id) {
-        return pointJpaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("엔티티가 존재하지 않습니다"));
+        return pointJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -28,6 +28,6 @@ public class PointRepositoryImpl implements PointRepository {
 
     @Override
     public Point findByMemberId(Long memberId) {
-        return pointJpaRepository.findByMemberId(memberId).orElseThrow(() -> new EntityNotFoundException("엔티티가 존재하지 않습니다"));
+        return pointJpaRepository.findByMemberId(memberId).orElseThrow(EntityNotFoundException::new);
     }
 }

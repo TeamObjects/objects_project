@@ -4,8 +4,8 @@ import com.objects.marketbridge.domain.model.Member;
 import com.objects.marketbridge.domain.model.QAddress;
 import com.objects.marketbridge.domain.model.QMember;
 import com.objects.marketbridge.domain.model.QPoint;
-import com.objects.marketbridge.global.error.EntityNotFoundException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -18,15 +18,17 @@ public class ProdTag extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
-    private Tag tagId;
+    private Tag tag;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product productId;
+    private Product product;
 
     @Builder
-    private ProdTag(Tag tagId, Product productId) {
-        this.tagId = tagId;
-        this.productId = productId;
+
+    private ProdTag(Tag tag, Product product) {
+        this.tag = tag;
+        this.product = product;
     }
 }
+

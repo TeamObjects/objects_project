@@ -8,7 +8,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 @Getter
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class SignUpDto {
@@ -36,7 +36,7 @@ public class SignUpDto {
                 .password(member.getPassword())
                 .name(member.getName())
                 .phoneNo(member.getPhoneNo())
-                .isAgree(member.isAgree())
+                .isAgree(member.getIsAgree())
                 .build();
     }
 

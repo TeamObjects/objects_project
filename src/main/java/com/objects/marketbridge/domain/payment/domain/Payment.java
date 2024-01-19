@@ -1,7 +1,7 @@
 package com.objects.marketbridge.domain.payment.domain;
 
 import com.objects.marketbridge.domain.model.BaseEntity;
-import com.objects.marketbridge.domain.order.domain.ProdOrder;
+import com.objects.marketbridge.domain.order.entity.ProdOrder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,26 +22,12 @@ public class Payment extends BaseEntity {
     @JoinColumn(name = "prod_order_id")
     private ProdOrder prodOrder;
 
-    private String receiptId;
     private String orderNo;
-    private String paymentType; // 일반결제, 브랜드페이
+    private String paymentType;
     private String paymentMethod; // CARD, TRANSFER, VIRTUAL
-    private Long totalPrice;
-    private Long balanceAmount;
-    private String requestedAt;
-    private String approvedAt;
     private String paymentKey;
-    private String settlementStatus; // 정산 상태
     private String paymentStatus;
     private String refundStatus;
-    private String customerName;
-    private String bankCode;
-    private String orderName;
-    private String phoneNo;
-
-    // 결제 취소에 대한 값
-    @Embedded
-    private PaymentCancel paymentCancel;
 
     // 카드 결제
     @Embedded
@@ -49,41 +35,42 @@ public class Payment extends BaseEntity {
 
     //가상 계좌 결제
     @Embedded
-    private VirtualAccount virtual;
+    private VirtualAccount virtualAccount;
+
+    //계좌 이체 결제
+    @Embedded
+    private Transfer transfer;
 
     @Builder
-    private Payment(ProdOrder prodOrder, String orderNo, String receiptId, String paymentType, String paymentMethod, Long totalPrice, Long balanceAmount, String requestedAt, String approvedAt, String paymentKey, String settlementStatus, String paymentStatus, String refundStatus, String customerName, String bankCode, String orderName, String phoneNo, PaymentCancel paymentCancel, Card card, VirtualAccount virtual) {
+    public Payment(ProdOrder prodOrder, String orderNo, String paymentType, String paymentMethod, String paymentKey, String paymentStatus, String refundStatus,  Card card, VirtualAccount virtualAccount, Transfer transfer) {
         this.prodOrder = prodOrder;
         this.orderNo = orderNo;
-        this.receiptId = receiptId;
         this.paymentType = paymentType;
         this.paymentMethod = paymentMethod;
-        this.totalPrice = totalPrice;
-        this.balanceAmount = balanceAmount;
-        this.requestedAt = requestedAt;
-        this.approvedAt = approvedAt;
         this.paymentKey = paymentKey;
-        this.settlementStatus = settlementStatus;
         this.paymentStatus = paymentStatus;
         this.refundStatus = refundStatus;
-        this.customerName = customerName;
-        this.bankCode = bankCode;
-        this.orderName = orderName;
-        this.phoneNo = phoneNo;
-        this.paymentCancel = paymentCancel;
         this.card = card;
-        this.virtual = virtual;
+        this.virtualAccount = virtualAccount;
+        this.transfer = transfer;
     }
 
-    public static Payment create(String customerName, String orderName, Long totalPrice, String orderNo, String paymentKey, String phoneNo, String paymentStatus) {
+    public static Payment create(String orderNo, String paymentType, String paymentMethod, String paymentKey, String paymentStatus, String refundStatus,  Card card, VirtualAccount virtualAccount, Transfer transfer) {
         return Payment.builder()
-                .customerName(customerName)
-                .orderName(orderName)
-                .totalPrice(totalPrice)
-                .paymentKey(paymentKey)
                 .orderNo(orderNo)
-                .phoneNo(phoneNo)
+                .paymentType(paymentType)
+                .paymentMethod(paymentMethod)
+                .paymentKey(paymentKey)
                 .paymentStatus(paymentStatus)
+                .refundStatus(refundStatus)
+                .card(card)
+                .virtualAccount(virtualAccount)
+                .transfer(transfer)
                 .build();
+    }
+
+    // ProdOrder와 연관관계 매핑 해주는 메서드 (단방향)
+    public void linkProdOrder(ProdOrder prodOrder) {
+        this.prodOrder = prodOrder;
     }
 }

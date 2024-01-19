@@ -18,15 +18,17 @@ public class ProductImage extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product productId;
+    private Product product;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
-    private Image imageId;
+    private Image image;
 
     @Builder
-    private ProductImage(Product productId, Image imageId) {
-        this.productId = productId;
-        this.imageId = imageId;
+
+    private ProductImage(Product product, Image image) {
+        this.product = product;
+        this.image = image;
     }
 }
+

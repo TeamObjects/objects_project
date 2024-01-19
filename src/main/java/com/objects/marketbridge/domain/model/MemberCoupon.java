@@ -32,11 +32,23 @@ public class MemberCoupon extends BaseEntity {
 
     private LocalDateTime usedDate;
 
+    private LocalDateTime endDate;
+
     @Builder
-    private MemberCoupon(Member member, Coupon coupon, boolean isUsed, LocalDateTime usedDate) {
+    private MemberCoupon(Member member, Coupon coupon, boolean isUsed, LocalDateTime usedDate, LocalDateTime endDate) {
         this.member = member;
         this.coupon = coupon;
         this.isUsed = isUsed;
         this.usedDate = usedDate;
+        this.endDate = endDate;
+    }
+
+    public void returnCoupon() {
+        isUsed = !isUsed;
+        usedDate = null;
+    }
+
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
     }
 }

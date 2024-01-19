@@ -4,49 +4,76 @@ import com.objects.marketbridge.domain.member.repository.MemberRepository;
 import com.objects.marketbridge.domain.model.Address;
 import com.objects.marketbridge.domain.model.Member;
 import com.objects.marketbridge.domain.model.Point;
-import com.objects.marketbridge.domain.order.controller.request.CreateOrderRequest;
+import com.objects.marketbridge.domain.order.controller.request.CheckoutRequest;
 import com.objects.marketbridge.domain.order.controller.response.CheckoutResponse;
-import com.objects.marketbridge.domain.order.controller.response.CreateOrderResponse;
+import com.objects.marketbridge.domain.order.dto.CreateOrderDto;
+import com.objects.marketbridge.domain.order.entity.OrderTemp;
 import com.objects.marketbridge.domain.order.service.CreateOrderService;
+import com.objects.marketbridge.domain.order.service.port.OrderRepository;
+import com.objects.marketbridge.domain.payment.config.TossPaymentConfig;
 import com.objects.marketbridge.global.common.ApiResponse;
+import com.objects.marketbridge.global.error.CustomLogicException;
+import com.objects.marketbridge.global.security.annotation.AuthMemberId;
+import com.objects.marketbridge.global.security.annotation.UserAuthorize;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static com.objects.marketbridge.global.error.ErrorCode.SHIPPING_ADDRESS_NOT_REGISTERED;
 
 @RestController
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final CreateOrderService createOrderService;
     private final MemberRepository memberRepository;
+    private final TossPaymentConfig tossPaymentConfig;
+    private final CreateOrderService createOrderService;
 
     @GetMapping("/orders/checkout")
-    public ApiResponse<CheckoutResponse> showCheckout(@SessionAttribute Long memberId) {
+    public ApiResponse<CheckoutResponse> getCheckout(
+            @AuthMemberId Long memberId) {
 
-        Member member = memberRepository.findByIdWithPointAndAddresses(memberId);
-        List<Address> addresses = member.getAddresses();
-        Point point = member.getPoint();
-
-        CheckoutResponse checkoutResponse = CheckoutResponse.builder()
-                .addressList(addresses.stream().map(Address::getAddressValue).collect(Collectors.toList()))
-                .pointBalance(point.getBalance()).build();
+        Member member = memberRepository.findByIdWithAddresses(memberId).orElseThrow(EntityNotFoundException::new);
+        CheckoutResponse checkoutResponse = createOrderResponse(member);
 
         return ApiResponse.ok(checkoutResponse);
     }
 
-    @PostMapping("/orders")
-    public ApiResponse<CreateOrderResponse> createOrder(@SessionAttribute Long memberId, @Valid @RequestBody CreateOrderRequest createOrderRequest) {
+    private CheckoutResponse createOrderResponse(Member member) {
 
-        String orderNo = UUID.randomUUID().toString();
+        Address address = filterDefaultAddress(member.getAddresses());
 
-        CreateOrderResponse resp = createOrderService.create(
-                createOrderRequest.toProdOrderDto(memberId, orderNo),
-                createOrderRequest.toProdOrderDetailDtos());
+        return CheckoutResponse.from(address.getAddressValue());
+    }
 
-        return ApiResponse.ok(resp);
+    private Address filterDefaultAddress(List<Address> addresses) {
+
+        return addresses.stream()
+                .filter(Address::isDefault)
+                .findFirst()
+                .orElseThrow(() -> new CustomLogicException(SHIPPING_ADDRESS_NOT_REGISTERED.getMessage(), SHIPPING_ADDRESS_NOT_REGISTERED));
+    }
+
+    @UserAuthorize
+    @PostMapping("/orders/checkout")
+    public ApiResponse<CheckoutRequest> saveOrderTemp(
+            @AuthMemberId Long memberId,
+            @Valid @RequestBody CheckoutRequest request) {
+
+//        OrderTemp orderTemp = OrderTemp.from(request);
+//        orderRepository.save(orderTemp);
+        request.setSuccessUrl(tossPaymentConfig.getSuccessUrl());
+        request.setFailUrl(tossPaymentConfig.getFailUrl());
+
+        CreateOrderDto createOrderDto = request.toDto(memberId);
+        createOrderService.create(createOrderDto);
+
+        return ApiResponse.ok(request);
     }
 }

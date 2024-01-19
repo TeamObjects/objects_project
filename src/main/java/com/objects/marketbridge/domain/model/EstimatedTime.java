@@ -16,13 +16,13 @@ public class EstimatedTime extends BaseEntity {
     @Column(name = "estimated_time_id")
     private Long id;
 
-    private Integer hour;
+    private Long hours;
 
-    private Integer addDay;
+    private Long addDay;
 
     @Builder
-    private EstimatedTime(Integer hour, Integer addDay) {
-        this.hour = hour;
+    private EstimatedTime(Long hour, Long addDay) {
+        this.hours = hours;
         this.addDay = addDay;
     }
 }

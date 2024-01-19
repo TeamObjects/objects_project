@@ -1,22 +1,23 @@
 package com.objects.marketbridge.domain.member.controller;
 
 
-import com.objects.marketbridge.domain.member.dto.MemberCouponDto;
+import com.objects.marketbridge.domain.member.dto.IsCheckedDto;
 import com.objects.marketbridge.domain.member.dto.SignUpDto;
 import com.objects.marketbridge.domain.member.dto.SignInDto;
 import com.objects.marketbridge.domain.member.dto.FindPointDto;
 import com.objects.marketbridge.domain.member.service.MemberService;
 import com.objects.marketbridge.global.security.annotation.AuthMemberId;
-import com.objects.marketbridge.global.security.jwt.JwtToken;
+import com.objects.marketbridge.global.security.annotation.GetAuthentication;
+import com.objects.marketbridge.global.security.dto.JwtTokenDto;
 import com.objects.marketbridge.global.common.ApiResponse;
+import com.objects.marketbridge.global.security.user.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,7 +28,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/check-email")
-    public ApiResponse<Boolean> checkDuplicateEmail(@RequestParam(name="email") String email) {
+    public ApiResponse<IsCheckedDto> checkDuplicateEmail(@RequestParam(name="email") String email) {
         return ApiResponse.ok(memberService.isDuplicateEmail(email));
     }
 
@@ -38,17 +39,23 @@ public class MemberController {
     }
 
     @PostMapping("/sign-in")
-    public ApiResponse<JwtToken> signIn(@Valid @RequestBody SignInDto signInDto) {
-        String email = signInDto.getEmail();
-        String password = signInDto.getPassword();
-        JwtToken jwtToken = memberService.signIn(email, password);
+    public ApiResponse<JwtTokenDto> signIn(@Valid @RequestBody SignInDto signInDto) {
+        return ApiResponse.ok(memberService.signIn(signInDto));
+    }
 
-        return ApiResponse.ok(jwtToken);
+    @DeleteMapping("/sign-out")
+    public ApiResponse<Void> signOut(@AuthMemberId Long memberId) {
+        memberService.signOut(memberId);
+        return ApiResponse.of(HttpStatus.OK, "Logged out successfully.", null);
+    }
+
+    @PutMapping("/re-issue")
+    public ApiResponse<JwtTokenDto> reIssueToken(@GetAuthentication CustomUserDetails principal) {
+        return ApiResponse.ok(memberService.reIssueToken(principal));
     }
 
     @GetMapping("/test")
     public Long authTest(@AuthMemberId Long id) {
-        log.info("id = {}", id);
         return id;
     }
 
@@ -64,11 +71,11 @@ public class MemberController {
         return ApiResponse.of(HttpStatus.OK,"completed",memberPoint);
     }
 
-    @GetMapping("/coupon/{id}")
-    public ApiResponse<List<MemberCouponDto>> findAllCouponById(@PathVariable Long id){
-
-        List<MemberCouponDto> memberCouponDtos = memberService.showAllMemberCoupons(id);
-
-        return ApiResponse.ok(memberCouponDtos);
-    }
+//    @GetMapping("/coupon/{id}")
+//    public ApiResponse<List<MemberCouponDto>> findAllCouponById(@PathVariable Long id){
+//
+//        List<MemberCouponDto> memberCouponDtos = memberService.showAllMemberCoupons(id);
+//
+//        return ApiResponse.ok(memberCouponDtos);
+//    }
 }

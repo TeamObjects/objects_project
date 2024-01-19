@@ -1,13 +1,16 @@
 package com.objects.marketbridge.domain.member.service;
 
 import com.objects.marketbridge.domain.member.dto.FindPointDto;
-import com.objects.marketbridge.domain.member.dto.MemberCouponDto;
+import com.objects.marketbridge.domain.member.dto.IsCheckedDto;
+import com.objects.marketbridge.domain.member.dto.SignInDto;
 import com.objects.marketbridge.domain.member.dto.SignUpDto;
-import com.objects.marketbridge.domain.member.repository.MemberCouponJpaRepository;
-import com.objects.marketbridge.domain.model.*;
+import com.objects.marketbridge.domain.model.Member;
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.global.security.jwt.JwtToken;
+import com.objects.marketbridge.global.security.dto.JwtTokenDto;
 import com.objects.marketbridge.global.security.jwt.JwtTokenProvider;
+import com.objects.marketbridge.domain.model.Membership;
+import com.objects.marketbridge.domain.model.Point;
+import com.objects.marketbridge.global.security.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -28,18 +31,19 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberCouponJpaRepository memberCouponJpaRepository;
+//    private final MemberCouponJpaRepository memberCouponJpaRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public boolean isDuplicateEmail(String email){
-        return memberRepository.findByEmail(email).isPresent();
+    public IsCheckedDto isDuplicateEmail(String email){
+        boolean isDuplicateEmail = memberRepository.findByEmail(email).isPresent();
+        return IsCheckedDto.builder().isCheckEmail(isDuplicateEmail).build();
     }
 
     @Transactional
     public void save(SignUpDto signUpDto) throws BadRequestException {
-        boolean isDuplicateEmail = isDuplicateEmail(signUpDto.getEmail());
+        boolean isDuplicateEmail = isDuplicateEmail(signUpDto.getEmail()).checkEmail();
 
         if (isDuplicateEmail) throw new BadRequestException("이미 존재하는 이메일 입니다.");
 
@@ -48,11 +52,23 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    @Transactional
-    public JwtToken signIn(String username, String password) {
+    public JwtTokenDto signIn(SignInDto signInDto) {
+
+        String username = signInDto.getEmail();
+        String password = signInDto.getPassword();
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        return jwtTokenProvider.generateToken(authentication);
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        return jwtTokenProvider.generateToken(principal);
+    }
+
+    public void signOut(Long memberId) {
+        jwtTokenProvider.deleteToken(memberId);
+    }
+
+    public JwtTokenDto reIssueToken(CustomUserDetails principal) {
+        return jwtTokenProvider.generateToken(principal);
     }
 
     @Transactional
@@ -76,11 +92,11 @@ public class MemberService {
         return Point.toDto(findMemberWithPoint);
     }
 
-    public List<MemberCouponDto> showAllMemberCoupons (Long memberId){
-        List<MemberCoupon> couponList = memberCouponJpaRepository.findByIdWithCoupon(memberId);
-
-        return couponList.stream()
-                .map(MemberCouponDto::from)
-                .collect(Collectors.toList());
-    }
+//    public List<MemberCouponDto> showAllMemberCoupons (Long memberId){
+//        List<MemberCoupon> couponList = memberCouponJpaRepository.findByIdWithCoupon(memberId);
+//
+//        return couponList.stream()
+//                .map(MemberCouponDto::from)
+//                .collect(Collectors.toList());
+//    }
 }
