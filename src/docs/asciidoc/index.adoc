@@ -23,6 +23,11 @@ include::api/order/ordercreate.adoc[]
 == OrderCheckout API
 
 include::api/order/ordercheckout.adoc[]
+
+[[email-check]]
+== MemberEmailCheck API
+
+include::api/order/ordercheckout.adoc[]
 // [[Order-API]]
 // == Order API
 //

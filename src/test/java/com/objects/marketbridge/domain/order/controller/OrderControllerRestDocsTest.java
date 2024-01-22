@@ -4,7 +4,7 @@ import com.objects.marketbridge.domain.member.repository.MemberRepository;
 import com.objects.marketbridge.domain.model.Address;
 import com.objects.marketbridge.domain.model.AddressValue;
 import com.objects.marketbridge.domain.model.Member;
-import com.objects.marketbridge.domain.order.RestDocsSupport;
+import com.objects.marketbridge.RestDocsSupport;
 import com.objects.marketbridge.domain.order.controller.request.CheckoutRequest;
 import com.objects.marketbridge.domain.order.entity.ProductValue;
 import com.objects.marketbridge.domain.order.service.CreateOrderService;
