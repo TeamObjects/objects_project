@@ -40,12 +40,12 @@ public class MemberService {
 
     public IsCheckedDto isDuplicateEmail(String email){
         boolean isDuplicateEmail = memberRepository.findByEmail(email).isPresent();
-        return IsCheckedDto.builder().isChecked(isDuplicateEmail).build();
+        return IsCheckedDto.builder().isCheckEmail(isDuplicateEmail).build();
     }
 
     @Transactional
     public void save(SignUpDto signUpDto) throws BadRequestException {
-        boolean isDuplicateEmail = isDuplicateEmail(signUpDto.getEmail()).isChecked();
+        boolean isDuplicateEmail = isDuplicateEmail(signUpDto.getEmail()).getIsCheckEmail();
 
         if (isDuplicateEmail) throw new BadRequestException("이미 존재하는 이메일 입니다.");
 
