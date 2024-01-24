@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.option;
 
-import com.objects.marketbridge.domain.model.Option;
+import com.objects.marketbridge.model.Option;
 
 public interface OptionRepository {
 

@@ -3,7 +3,6 @@
 
 ==== HTTP Request
 include::{snippets}/order-checkout/http-request.adoc[]
-include::{snippets}/order-checkout/request-fields.adoc[]
 
 ==== HTTP Response
 include::{snippets}/order-checkout/http-response.adoc[]

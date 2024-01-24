@@ -1,13 +1,7 @@
 package com.objects.marketbridge.domain.product.dto;
 
-import com.objects.marketbridge.domain.model.Image;
-import com.objects.marketbridge.domain.model.Option;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class ProductResponseDto {

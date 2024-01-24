@@ -1,9 +1,5 @@
 package com.objects.marketbridge.domain.product.dto;
 
-import com.objects.marketbridge.domain.model.Category;
-import com.objects.marketbridge.domain.model.Image;
-import com.objects.marketbridge.domain.model.Option;
-import com.objects.marketbridge.domain.model.OptionCategory;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;

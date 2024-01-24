@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.Image;
 
-import com.objects.marketbridge.domain.model.ProductImage;
+import com.objects.marketbridge.model.ProductImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

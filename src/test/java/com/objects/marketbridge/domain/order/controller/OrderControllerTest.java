@@ -2,7 +2,7 @@ package com.objects.marketbridge.domain.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.domain.model.Member;
+import com.objects.marketbridge.model.Member;
 import com.objects.marketbridge.domain.order.controller.request.CheckoutRequest;
 import com.objects.marketbridge.domain.order.entity.ProductValue;
 import com.objects.marketbridge.domain.order.service.CreateOrderService;
@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -27,7 +27,7 @@ include::api/order/ordercheckout.adoc[]
 [[email-check]]
 == MemberEmailCheck API
 
-include::api/order/ordercheckout.adoc[]
+include::api/member/memberemailcheck.adoc[]
 // [[Order-API]]
 // == Order API
 //

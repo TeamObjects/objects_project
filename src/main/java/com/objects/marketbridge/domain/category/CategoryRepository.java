@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.category;
 
-import com.objects.marketbridge.domain.model.Category;
+import com.objects.marketbridge.model.Category;
 
 public interface CategoryRepository {
 

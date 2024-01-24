@@ -1,9 +1,10 @@
 package com.objects.marketbridge.domain.order.service;
 
+import com.objects.marketbridge.domain.order.controller.response.TossAutoPaymentsResponse;
 import com.objects.marketbridge.domain.order.controller.response.TossErrorResponse;
 import com.objects.marketbridge.domain.order.controller.response.TossPaymentsResponse;
-import com.objects.marketbridge.domain.order.entity.OrderTemp;
 import com.objects.marketbridge.domain.order.entity.ProdOrder;
+import com.objects.marketbridge.domain.payment.dto.TossAutoPaymentRequest;
 import com.objects.marketbridge.global.error.CustomLogicException;
 import com.objects.marketbridge.domain.order.service.port.OrderRepository;
 import com.objects.marketbridge.domain.payment.config.TossPaymentConfig;
@@ -65,6 +66,37 @@ public class TossApiService {
                 // TODO : 결제 실패시 어떻게 처리?
 
     }
+
+    // Toss 자동결제 TEST
+    public TossAutoPaymentsResponse requestAutoPayment(TossAutoPaymentRequest request) {
+
+
+        String encodedAuthKey = new String(Base64.getEncoder().encode(tossPaymentConfig.getTestSecretKey().getBytes(StandardCharsets.UTF_8)));
+
+        WebClient tossWebClient = WebClient.builder()
+                .baseUrl(TOSS_BASE_URL)
+                .defaultHeaders(httpHeaders -> httpHeaders.setBasicAuth(encodedAuthKey))
+                .build();
+
+        return tossWebClient
+                .post()
+                .uri("/billing/authorizations/card")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()// 외부 API 호출!
+                .onStatus(HttpStatusCode::is4xxClientError,
+                        resp -> resp
+                                .bodyToMono(TossErrorResponse.class)
+                                .flatMap(e ->
+                                        Mono.error(new CustomLogicException(e.getCode(), e.getMessage())))
+                )
+                .bodyToMono(TossAutoPaymentsResponse.class)
+                .block();
+    }
+
+
+
 
     private void validPayment(String orderNo, Long totalOrderPrice) {
 

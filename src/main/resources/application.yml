@@ -58,6 +58,10 @@ payment:
     test_secret_api_key : "test_sk_QbgMGZzorzyG7E6ZkybPVl5E1em4:"
     success_url : "http://localhost:8080/payments/toss/success"
     fail_url : "http://localhost:8080/payments/toss/fail"
+
+  portone:
+    test_rest_api_key : "6430163526063253"
+    test_secret_api_key : "pX0TgUZxK4wbrQkxMJw0B35pprWqqwma6pS0ihth531HX07ZFGCNNqI0teZgO5BD6BPE0fNd7x8RPy61"
 ---
 
 spring:

@@ -1,13 +1,11 @@
 package com.objects.marketbridge.domain.product.repository;
 
-import com.objects.marketbridge.domain.model.Product;
-import com.objects.marketbridge.domain.product.dto.ProductRequestDto;
+import com.objects.marketbridge.model.Product;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository

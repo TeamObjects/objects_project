@@ -1,12 +1,10 @@
 package com.objects.marketbridge.domain.member.repository;
 
-import com.objects.marketbridge.domain.model.Member;
-import com.objects.marketbridge.domain.model.MemberCoupon;
+import com.objects.marketbridge.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface MemberJpaRepository extends JpaRepository<Member, Long> {

@@ -1,9 +1,8 @@
 package com.objects.marketbridge.domain.coupon.repository;
 
-import com.objects.marketbridge.domain.model.Coupon;
+import com.objects.marketbridge.model.Coupon;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CouponRepository {
     Coupon findById(Long id);

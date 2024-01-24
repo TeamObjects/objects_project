@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.order.controller.response;
 
-import com.objects.marketbridge.domain.model.Product;
+import com.objects.marketbridge.model.Product;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

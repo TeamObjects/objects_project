@@ -1,10 +1,8 @@
 package com.objects.marketbridge.domain.order.entity;
 
-import com.objects.marketbridge.domain.model.BaseEntity;
-import com.objects.marketbridge.domain.model.Coupon;
-import com.objects.marketbridge.domain.model.ProdOption;
-import com.objects.marketbridge.domain.model.Product;
-import com.objects.marketbridge.domain.order.service.CreateOrderService;
+import com.objects.marketbridge.model.BaseEntity;
+import com.objects.marketbridge.model.Coupon;
+import com.objects.marketbridge.model.Product;
 import jakarta.persistence.*;
 import lombok.*;
 

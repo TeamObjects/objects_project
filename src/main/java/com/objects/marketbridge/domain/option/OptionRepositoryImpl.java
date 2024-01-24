@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.option;
 
-import com.objects.marketbridge.domain.model.Option;
+import com.objects.marketbridge.model.Option;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

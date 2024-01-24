@@ -1,8 +1,8 @@
 package com.objects.marketbridge.domain.address.repository;
 
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.domain.model.Address;
-import com.objects.marketbridge.domain.model.Member;
+import com.objects.marketbridge.model.Address;
+import com.objects.marketbridge.model.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

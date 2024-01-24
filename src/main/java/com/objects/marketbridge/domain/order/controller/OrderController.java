@@ -1,8 +1,9 @@
 package com.objects.marketbridge.domain.order.controller;
 
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.domain.model.Address;
-import com.objects.marketbridge.domain.model.Member;
+import com.objects.marketbridge.domain.payment.dto.TossAutoPaymentRequest;
+import com.objects.marketbridge.model.Address;
+import com.objects.marketbridge.model.Member;
 import com.objects.marketbridge.domain.order.controller.request.CheckoutRequest;
 import com.objects.marketbridge.domain.order.controller.response.CheckoutResponse;
 import com.objects.marketbridge.domain.order.dto.CreateOrderDto;

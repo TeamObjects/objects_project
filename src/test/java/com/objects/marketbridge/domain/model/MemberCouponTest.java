@@ -1,5 +1,6 @@
 package com.objects.marketbridge.domain.model;
 
+import com.objects.marketbridge.model.MemberCoupon;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

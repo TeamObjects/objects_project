@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.point.repository;
 
-import com.objects.marketbridge.domain.model.Point;
+import com.objects.marketbridge.model.Point;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

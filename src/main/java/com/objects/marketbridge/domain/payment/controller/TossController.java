@@ -1,13 +1,16 @@
 package com.objects.marketbridge.domain.payment.controller;
 
+import com.objects.marketbridge.domain.order.controller.response.TossAutoPaymentsResponse;
 import com.objects.marketbridge.domain.order.controller.response.TossPaymentsResponse;
 import com.objects.marketbridge.domain.order.service.TossApiService;
+import com.objects.marketbridge.domain.payment.dto.TossAutoPaymentRequest;
 import com.objects.marketbridge.domain.payment.dto.TossConfirmRequest;
 import com.objects.marketbridge.domain.payment.service.CreatePaymentService;
 import com.objects.marketbridge.global.common.ApiResponse;
 import com.objects.marketbridge.global.security.mock.AuthMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,4 +58,15 @@ public class TossController {
         return null;
 
     }
+
+    @PostMapping("/v1/billing/authorizations/card")
+    public ApiResponse<TossAutoPaymentsResponse> TossAutoPayment (TossAutoPaymentRequest request){
+
+        TossAutoPaymentsResponse tossPaymentsResponse =
+                tossApiService.requestAutoPayment(request);
+
+        System.out.println("tossPaymentsResponse.getBillingKey() = " + tossPaymentsResponse.getBillingKey());
+        return ApiResponse.ok(tossPaymentsResponse);
+    }
+    
 }

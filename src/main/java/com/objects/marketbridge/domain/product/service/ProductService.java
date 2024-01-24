@@ -1,14 +1,13 @@
 package com.objects.marketbridge.domain.product.service;
 
-import com.objects.marketbridge.domain.model.*;
 import com.objects.marketbridge.domain.product.dto.ProductRequestDto;
 import com.objects.marketbridge.domain.Image.ImageRepository;
 import com.objects.marketbridge.domain.Image.ProductImageRepository;
-import com.objects.marketbridge.domain.product.dto.ProductResponseDto;
 import com.objects.marketbridge.domain.product.repository.ProductRepository;
 import com.objects.marketbridge.domain.category.CategoryRepository;
 import com.objects.marketbridge.domain.option.OptionRepository;
 import com.objects.marketbridge.domain.option.ProdOptionRepository;
+import com.objects.marketbridge.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

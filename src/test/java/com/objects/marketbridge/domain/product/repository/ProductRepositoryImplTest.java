@@ -1,7 +1,6 @@
 package com.objects.marketbridge.domain.product.repository;
 
-import com.objects.marketbridge.domain.model.Product;
-import org.assertj.core.api.Assertions;
+import com.objects.marketbridge.model.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProductRepositoryImplTest {

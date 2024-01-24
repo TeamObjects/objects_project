@@ -1,6 +1,5 @@
 package com.objects.marketbridge.domain.product.controller;
 
-import com.objects.marketbridge.domain.model.Product;
 import com.objects.marketbridge.domain.product.dto.ProductRequestDto;
 import com.objects.marketbridge.domain.product.dto.ProductResponseDto;
 import com.objects.marketbridge.domain.product.repository.ProductRepository;

@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.product.repository;
 
-import com.objects.marketbridge.domain.model.Product;
+import com.objects.marketbridge.model.Product;
 
 import java.util.List;
 
