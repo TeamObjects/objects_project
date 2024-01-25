@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.member.dto;
 
-import com.objects.marketbridge.domain.model.MemberCoupon;
+import com.objects.marketbridge.model.MemberCoupon;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

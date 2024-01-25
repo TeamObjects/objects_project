@@ -1,35 +1,57 @@
 package com.objects.marketbridge.domain.payment.service;
 
-import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.domain.model.Member;
-import com.objects.marketbridge.domain.order.domain.ProdOrder;
+import com.objects.marketbridge.domain.order.controller.response.TossPaymentsResponse;
+import com.objects.marketbridge.domain.order.entity.ProdOrder;
+import com.objects.marketbridge.domain.order.entity.ProdOrderDetail;
+import com.objects.marketbridge.domain.order.service.port.OrderDetailRepository;
 import com.objects.marketbridge.domain.order.service.port.OrderRepository;
-import com.objects.marketbridge.domain.payment.domain.Payment;
+import com.objects.marketbridge.domain.payment.domain.*;
 import com.objects.marketbridge.domain.payment.service.port.PaymentRepository;
-import com.objects.marketbridge.global.error.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.objects.marketbridge.domain.payment.domain.TossPaymentsStatus.IN_PROGRESS;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CreatePaymentService {
+
     private final PaymentRepository paymentRepository;
-    private final MemberRepository memberRepository;
+    private final OrderDetailRepository orderDetailRepository;
     private final OrderRepository orderRepository;
-    @Transactional
-    public void create(Long memberId, String paymentKey, String orderNo, Long totalPrice) {
-        ProdOrder prodOrder = orderRepository.findByOrderNo(orderNo);
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new EntityNotFoundException("엔티티가 존재하지 않습니다"));
 
-        String memberName     = member.getName();
-        String phoneNo        = member.getPhoneNo();
-        String orderName      = prodOrder.getOrderName();
+    public void create(TossPaymentsResponse tossPaymentsResponse) {
 
-        Payment payment = Payment.create(memberName, orderName, totalPrice, orderNo, paymentKey, phoneNo, IN_PROGRESS.toString());
+        // 1. Payment 엔티티 생성
+        Payment payment = createPayment(tossPaymentsResponse);
+
+        // 2. 연관관계 매핑
+        List<ProdOrderDetail> orderDetails = orderDetailRepository.findByOrderNo(tossPaymentsResponse.getOrderId());
+        ProdOrder order = orderRepository.findByOrderNo(tossPaymentsResponse.getOrderId());
+        payment.linkProdOrder(order);
+
+        // 3. orderDetail 에 paymentKey 집어넣어주기
+        orderDetails.forEach(o -> o.changePaymentKey(tossPaymentsResponse.getPaymentKey()));
+
+        // 3. 영속성 저장
         paymentRepository.save(payment);
     }
+
+    private Payment createPayment(TossPaymentsResponse tossPaymentsResponse) {
+
+        String orderNo = tossPaymentsResponse.getOrderId();
+        String paymentType = tossPaymentsResponse.getPaymentType();
+        String paymentMethod = tossPaymentsResponse.getPaymentMethod();
+        String paymentKey = tossPaymentsResponse.getPaymentKey();
+        String paymentStatus = tossPaymentsResponse.getPaymentStatus();
+        String refundStatus = tossPaymentsResponse.getRefundStatus();
+        Card card = tossPaymentsResponse.getCard();
+        VirtualAccount virtualAccount = tossPaymentsResponse.getVirtualAccount();
+        Transfer transfer = tossPaymentsResponse.getTransfer();
+
+        return Payment.create(orderNo, paymentType, paymentMethod, paymentKey, paymentStatus, refundStatus,  card, virtualAccount, transfer);
+    }
+
 }

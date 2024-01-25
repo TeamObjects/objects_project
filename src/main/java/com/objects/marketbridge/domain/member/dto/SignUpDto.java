@@ -1,14 +1,14 @@
 package com.objects.marketbridge.domain.member.dto;
 
 
-import com.objects.marketbridge.domain.model.Member;
-import com.objects.marketbridge.domain.model.Membership;
-import com.objects.marketbridge.domain.model.SocialType;
+import com.objects.marketbridge.model.Member;
+import com.objects.marketbridge.model.Membership;
+import com.objects.marketbridge.model.SocialType;
 import jakarta.validation.constraints.*;
 import lombok.*;
 @Getter
 @ToString
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class SignUpDto {
@@ -36,7 +36,7 @@ public class SignUpDto {
                 .password(member.getPassword())
                 .name(member.getName())
                 .phoneNo(member.getPhoneNo())
-                .isAgree(member.isAgree())
+                .isAgree(member.getIsAgree())
                 .build();
     }
 

@@ -1,7 +1,7 @@
 package com.objects.marketbridge.global.security.user;
 
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.domain.model.Member;
+import com.objects.marketbridge.model.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

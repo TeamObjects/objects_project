@@ -29,7 +29,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> of(HttpStatus httpStatus) {
-        return of(httpStatus, httpStatus.name(), null);
+        return of(httpStatus, null);
     }
 
     public static <T> ApiResponse<T> ok(T data) {

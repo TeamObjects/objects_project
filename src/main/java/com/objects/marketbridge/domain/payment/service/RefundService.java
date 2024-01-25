@@ -1,6 +1,8 @@
 package com.objects.marketbridge.domain.payment.service;
 
+import com.objects.marketbridge.domain.order.controller.response.RefundInfo;
 import com.objects.marketbridge.domain.payment.client.RefundClient;
+import com.objects.marketbridge.domain.payment.domain.Payment;
 import com.objects.marketbridge.domain.payment.domain.RefundHistory;
 import com.objects.marketbridge.domain.payment.dto.RefundDto;
 import com.objects.marketbridge.domain.payment.dto.RefundInfoDto;
@@ -15,16 +17,8 @@ import java.util.Optional;
 public class RefundService {
 
     private final RefundClient refundClient;
-    private final RefundHistoryRepository refundHistoryRepository;
 
-    public RefundDto refund(String accountNo, Float refundPrice) {
-        Optional<RefundInfoDto> refundInfo = refundClient.refund(accountNo, refundPrice);
-
-        if (refundInfo.isPresent()) {
-            refundHistoryRepository.save(RefundHistory.builder()
-                    .accountNo(accountNo)
-                    .build());
-        }
-        return refundInfo.orElseThrow().toRefundDto();
+    public RefundDto refund(Payment paymentKey, String cancelReason, Long cancelAmount) {
+        return RefundDto.of(refundClient.refund(paymentKey, cancelReason, cancelAmount));
     }
 }

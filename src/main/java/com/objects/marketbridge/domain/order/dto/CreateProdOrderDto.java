@@ -5,20 +5,26 @@ import lombok.Getter;
 
 @Getter
 public class CreateProdOrderDto {
-    private String paymentMethod;
     private Long memberId;
     private Long addressId;
     private String orderName;
-    private Long totalOrderPrice;
     private String orderNo;
+    private Long totalSavedPoint;
+    private Long totalUsedCoupon;
+    private Long membershipDiscountPrice;
+    private Long totalOrderPrice;
+    private Long realOrderPrice;
 
     @Builder
-    public CreateProdOrderDto(String paymentMethod, Long memberId, Long addressId, String orderName, Long totalOrderPrice, String orderNo) {
-        this.paymentMethod = paymentMethod;
+    public CreateProdOrderDto(Long memberId, Long addressId, String orderName, String orderNo, Long totalSavedPoint, Long totalUsedCoupon, Long membershipDiscountPrice, Long totalOrderPrice, Long realOrderPrice) {
         this.memberId = memberId;
         this.addressId = addressId;
         this.orderName = orderName;
         this.orderNo = orderNo;
+        this.totalSavedPoint = totalSavedPoint;
+        this.totalUsedCoupon = totalUsedCoupon;
+        this.membershipDiscountPrice = membershipDiscountPrice;
         this.totalOrderPrice = totalOrderPrice;
+        this.realOrderPrice = realOrderPrice;
     }
 }

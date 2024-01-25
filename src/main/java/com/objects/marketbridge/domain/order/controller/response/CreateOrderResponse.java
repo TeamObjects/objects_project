@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CreateOrderResponse {
-    private String paymentMethod;
     private Long totalOrderPrice;
     private String orderName;
     private String orderNo;
@@ -17,8 +16,7 @@ public class CreateOrderResponse {
     private String failUrl;
 
     @Builder
-    public CreateOrderResponse(String paymentMethod, Long totalOrderPrice, String orderName, String orderNo,  String email, String successUrl, String failUrl) {
-        this.paymentMethod = paymentMethod;
+    public CreateOrderResponse(Long totalOrderPrice, String orderName, String orderNo,  String email, String successUrl, String failUrl) {
         this.totalOrderPrice = totalOrderPrice;
         this.orderName = orderName;
         this.orderNo = orderNo;
@@ -33,7 +31,6 @@ public class CreateOrderResponse {
                 .orderName(prodOrderDto.getOrderName())
                 .totalOrderPrice(prodOrderDto.getTotalOrderPrice())
                 .orderNo(prodOrderDto.getOrderNo())
-                .paymentMethod(prodOrderDto.getPaymentMethod())
                 .successUrl(successUrl)
                 .failUrl(failUrl)
                 .build();

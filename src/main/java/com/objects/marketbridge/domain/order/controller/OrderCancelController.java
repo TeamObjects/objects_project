@@ -6,22 +6,21 @@ import com.objects.marketbridge.domain.order.service.OrderCancelService;
 import com.objects.marketbridge.global.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
 public class OrderCancelController {
 
-    private OrderCancelService orderCancelService;
+    private final OrderCancelService orderCancelService;
 
     @PostMapping("/orders/cancel-flow")
-    public ApiResponse<OrderCancelResponse> cancelOrder(
-            @RequestParam Long orderId,
-            @RequestParam String reason) {
-
-        orderCancelService.orderCancel(orderId, reason);
-
-        return ApiResponse.of(HttpStatus.OK, "이상없음", new OrderCancelResponse());
+    public ApiResponse<OrderCancelResponse> cancelOrder(@RequestBody @Valid OrderCancelRequest request) {
+        return ApiResponse.ok(orderCancelService.orderCancel(request.toServiceRequest(), LocalDateTime.now()));
     }
 }

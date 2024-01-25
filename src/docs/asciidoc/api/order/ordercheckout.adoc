@@ -1,0 +1,9 @@
+[[order-checkout]]
+=== 주문서 출력
+
+==== HTTP Request
+include::{snippets}/order-checkout/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/order-checkout/http-response.adoc[]
+include::{snippets}/order-checkout/response-fields.adoc[]

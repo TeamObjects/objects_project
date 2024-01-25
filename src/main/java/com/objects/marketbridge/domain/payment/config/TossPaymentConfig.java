@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class TossPaymentConfig {
 
-    public static final String TOSS_BASE_URL = "https://api.tosspayments.com/v1/payments";
+    public static final String TOSS_BASE_URL = "https://api.tosspayments.com/v1/";
 
     @Value("${payment.toss.test_client_api_key}")
     private String testClientApiKey;

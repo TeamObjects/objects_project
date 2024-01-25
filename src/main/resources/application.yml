@@ -7,6 +7,10 @@ spring:
   config:
     activate:
       on-profile: local
+  sql:
+    init:
+      mode: always
+      platform: mysql # 이거 없으면 mysql 인식 못함
 
   jwt: # CLI 명령어 - openssl rand -base64 32 로 생성된 값
     secret: VZvl0mIgwU2UmDMXqa7CL79kdBUYz+IvHQWmNsWT4uA=
@@ -15,6 +19,11 @@ spring:
     url: jdbc:mysql://localhost:3306/MarketBridge
     username: objects
     password: 1234
+
+  #  datasource:
+#    url: jdbc:h2:tcp://localhost/~/Marketbridge
+#    username: sa
+#    password:
 
   jpa:
     hibernate:
@@ -41,12 +50,18 @@ logging:
     org.hibernate.sql: debug
 
 
+
+
 payment:
   toss:
     test_client_api_key : "test_ck_GePWvyJnrK2PmxlyQWMqVgLzN97E"
     test_secret_api_key : "test_sk_QbgMGZzorzyG7E6ZkybPVl5E1em4:"
     success_url : "http://localhost:8080/payments/toss/success"
     fail_url : "http://localhost:8080/payments/toss/fail"
+
+  portone:
+    test_rest_api_key : "6430163526063253"
+    test_secret_api_key : "pX0TgUZxK4wbrQkxMJw0B35pprWqqwma6pS0ihth531HX07ZFGCNNqI0teZgO5BD6BPE0fNd7x8RPy61"
 ---
 
 spring:
@@ -54,14 +69,15 @@ spring:
     activate:
       on-profile: test
 
+  sql:
+    init:
+      mode: always
+      platform: h2
+
   jwt: # CLI 명령어 - openssl rand -base64 32 로 생성된 값
     secret: VZvl0mIgwU2UmDMXqa7CL79kdBUYz+IvHQWmNsWT4uA=
 
   datasource:
-#    url: jdbc:mysql://localhost:3306/MarketBridge
-#    username: objects
-#    password: 1234
-    #    url: jdbc:h2:tcp://localhost/~/Marketbridge
     url: jdbc:h2:mem:~/Marketbridge
     driver-class-name: org.h2.Driver
     username: sa
@@ -69,15 +85,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-
-  sql:
-    init:
-      mode: never
+        default_batch_fetch_size: 100
+    defer-datasource-initialization: true
 
   h2:
     console:

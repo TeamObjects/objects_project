@@ -17,7 +17,7 @@ public class ProductInfoDto {
     private Long quantity;
 
     @NotNull
-    private Long unitOrderPrice;
+    private Long unitOrderPrice; // 할인 + 쿠폰 + 옵션 가격이 적용된 개별 가격
 
     private Long usedCouponId;
 

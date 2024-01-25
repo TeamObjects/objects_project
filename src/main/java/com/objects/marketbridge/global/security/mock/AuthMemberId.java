@@ -1,0 +1,18 @@
+package com.objects.marketbridge.global.security.mock;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import static com.objects.marketbridge.global.security.constants.SecurityConst.*;
+
+@Target({ ElementType.PARAMETER, ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+@PreAuthorize(AUTH_USER)
+@AuthenticationPrincipal(expression = ID)
+public @interface AuthMemberId {
+
+}

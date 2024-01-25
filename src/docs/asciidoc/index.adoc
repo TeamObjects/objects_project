@@ -1,0 +1,34 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= MARKETBRIDGE REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[OrderCancel-API]]
+== OrderCancel API
+
+include::api/order/ordercancel.adoc[]
+
+[[OrderCreate-API]]
+== OrderCreate API
+
+include::api/order/ordercreate.adoc[]
+
+[[OrderCheckout-API]]
+== OrderCheckout API
+
+include::api/order/ordercheckout.adoc[]
+
+[[email-check]]
+== MemberEmailCheck API
+
+include::api/member/memberemailcheck.adoc[]
+// [[Order-API]]
+// == Order API
+//
+// include::api/order/ordercancel.adoc[]

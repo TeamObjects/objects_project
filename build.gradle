@@ -3,7 +3,6 @@ plugins {
 	id 'org.springframework.boot' version '3.2.1'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id "org.asciidoctor.jvm.convert" version '3.3.2'
-	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 group = 'com.objects'
@@ -50,6 +49,7 @@ dependencies {
 
 	// Spring Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation("org.springframework.security:spring-security-test")
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -67,8 +67,11 @@ ext { // 전역 변수
 	snippetsDir = file('build/generated-snippets')
 }
 
-test {
+tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
 	outputs.dir snippetsDir
 }
 
@@ -76,16 +79,46 @@ asciidoctor {
 	inputs.dir snippetsDir
 	configurations 'asciidoctorExt'
 
-	sources { // 특정 파일만 html로 만든다.
+	sources{ // 특정 파일만 html 로 만든다
 		include("**/index.adoc")
 	}
-	baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
+
+	baseDirFollowsSourceDir() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다
 	dependsOn test
 }
+
+//// static/docs 폴더 비우기
+//asciidoctor.doFirst {
+//	delete file('src/main/resources/static/docs')
+//}
+//
+//// asccidoctor 작업 이후 생성된 HTML 파일을 static/docs 로 copy
+//task copyDocument(type: Copy) {
+//	dependsOn asciidoctor
+//	from file("build/docs/asciidoc")
+//	into file("src/main/resources/static/docs")
+//}
+//
+//// build 의 의존작업 명시
+//build {
+//	dependsOn copyDocument
+//}
 
 bootJar {
 	dependsOn asciidoctor
 	from("${asciidoctor.outputDir}") {
-		into 'static/docs'
+		into 'src/main/resources/static/docs'
 	}
+}
+
+
+def querydslDir = "src/main/generated"
+
+tasks.withType(JavaCompile) {
+	options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+//	options.compilerArgs.add("parameters")
+}
+
+clean.doLast {
+	file(querydslDir).deleteDir()
 }

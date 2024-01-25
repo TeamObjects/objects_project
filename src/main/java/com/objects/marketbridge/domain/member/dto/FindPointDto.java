@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.member.dto;
 
-import com.objects.marketbridge.domain.model.BaseEntity;
+import com.objects.marketbridge.model.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

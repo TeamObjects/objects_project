@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.member.repository;
 
-import com.objects.marketbridge.domain.model.MemberCoupon;
+import com.objects.marketbridge.model.MemberCoupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

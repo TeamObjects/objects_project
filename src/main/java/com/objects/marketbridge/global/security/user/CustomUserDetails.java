@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 
 @Getter
 public class CustomUserDetails implements UserDetails {
-    private Long id;
-    private String email;
-    private String password;
-    private List<String> roles;
+    private final Long id;
+    private final String email;
+    private final String password;
+    private final List<String> roles;
 
     public CustomUserDetails(Long id, String email, String password, List<String> roles) {
         this.id = id;

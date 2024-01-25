@@ -1,0 +1,9 @@
+[[email-check]]
+=== 이메일체크
+
+==== HTTP Request
+include::{snippets}/check-email/http-request.adoc[]
+
+==== HTTP Response
+include::{snippets}/check-email/http-response.adoc[]
+include::{snippets}/check-email/response-fields.adoc[]

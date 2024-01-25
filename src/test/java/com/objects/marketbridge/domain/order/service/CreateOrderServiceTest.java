@@ -1,22 +1,23 @@
 package com.objects.marketbridge.domain.order.service;
 
-import com.objects.marketbridge.address.repository.AddressRepository;
+import com.objects.marketbridge.domain.address.repository.AddressRepository;
 import com.objects.marketbridge.domain.coupon.repository.CouponRepository;
 import com.objects.marketbridge.domain.member.repository.MemberRepository;
-import com.objects.marketbridge.domain.model.Address;
-import com.objects.marketbridge.domain.model.Member;
-import com.objects.marketbridge.domain.model.Product;
-import com.objects.marketbridge.domain.order.controller.request.CreateOrderRequest;
-import com.objects.marketbridge.domain.order.domain.ProdOrderDetail;
-import com.objects.marketbridge.domain.order.dto.CreateProdOrderDetailDto;
-import com.objects.marketbridge.domain.order.dto.CreateProdOrderDto;
-import com.objects.marketbridge.domain.order.dto.ProductInfoDto;
+import com.objects.marketbridge.model.Address;
+import com.objects.marketbridge.model.Coupon;
+import com.objects.marketbridge.model.Member;
+import com.objects.marketbridge.model.Product;
+import com.objects.marketbridge.domain.order.dto.CreateOrderDto;
+import com.objects.marketbridge.domain.order.entity.ProdOrder;
+import com.objects.marketbridge.domain.order.entity.ProdOrderDetail;
+import com.objects.marketbridge.domain.order.entity.ProductValue;
+import com.objects.marketbridge.domain.order.entity.StatusCodeType;
 import com.objects.marketbridge.domain.order.service.port.OrderDetailRepository;
 import com.objects.marketbridge.domain.order.service.port.OrderRepository;
 import com.objects.marketbridge.domain.product.repository.ProductJpaRepository;
 import com.objects.marketbridge.domain.product.repository.ProductRepository;
-import com.objects.marketbridge.global.error.EntityNotFoundException;
-import org.junit.jupiter.api.AfterEach;
+import jakarta.persistence.EntityNotFoundException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,11 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Transactional
-@ActiveProfiles("local")
 class CreateOrderServiceTest {
 
     @Autowired CreateOrderService createOrderService;
@@ -53,7 +54,8 @@ class CreateOrderServiceTest {
 
         // address 생성
         Address address = Address.builder()
-                .member(member).build();
+                .member(member)
+                .build();
         addressRepository.save(address);
 
         // product 생성
@@ -69,68 +71,144 @@ class CreateOrderServiceTest {
                 .name("워치")
                 .price(3000L)
                 .build();
-
         productRepository.saveAll(List.of(product1, product2, product3));
-    }
-    @AfterEach
-    void tearDown() {
-        productJpaRepository.deleteAllInBatch();
-        addressRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
-        orderDetailRepository.deleteAllInBatch();
-        orderRepository.deleteAllInBatch();
-    }
 
-    @DisplayName("물건을 N가지 상품을 샀으면 받았으면 N개의 주문이 생성된다.")
+
+        // coupon 생성
+        Coupon coupon1 = Coupon.builder()
+                .price(2000L)
+                .product(product1)
+                .name("가방쿠폰")
+                .build();
+
+        Coupon coupon2 = Coupon.builder()
+                .price(2000L)
+                .product(product2)
+                .name("티비")
+                .build();
+
+        couponRepository.saveAll(List.of(coupon1, coupon2));
+    }
+    @DisplayName("주문 생성시 ProdOrder 를 생성 한다.")
     @Test
-    void create(){
+    void CreateProdOrder(){
+
         //given
-        Member findMember = memberRepository.findByEmail("hong@email.com").orElseThrow(() -> new EntityNotFoundException("엔티티가 존재하지않습니다"));
-        Address findAddress = addressRepository.findByMemberId(findMember.getId());
-        Long findProductId1 = productRepository.findByName("가방").get(0).getId();
-        Long findProductId2 = productRepository.findByName("티비").get(0).getId();
-        Long findProductId3 = productRepository.findByName("워치").get(0).getId();
-
-        ProductInfoDto productInfoDto1 = ProductInfoDto.builder()
-                .productId(findProductId1)
-                .quantity(1L)
-                .unitOrderPrice(1000L)
-                .build();
-
-        ProductInfoDto productInfoDto2 = ProductInfoDto.builder()
-                .productId(findProductId2)
-                .quantity(2L)
-                .unitOrderPrice(4000L)
-                .build();
-
-        ProductInfoDto productInfoDto3 = ProductInfoDto.builder()
-                .productId(findProductId3)
-                .quantity(3L)
-                .unitOrderPrice(9000L)
-                .build();
-
-        List<ProductInfoDto> productInfos = List.of(productInfoDto1, productInfoDto2, productInfoDto3);
-
-        CreateOrderRequest createOrderRequest = CreateOrderRequest.builder()
-                .paymentMethod("신용카드")
-                .orderName("가방 외 2건")
-                .totalOrderPrice(14000L)
-                .addressId(findAddress.getId())
-                .productInfos(productInfos)
-                .build();
-
-        String orderNo = "0000-0000-0000-0000";
-        CreateProdOrderDto prodOrderDto = createOrderRequest.toProdOrderDto(findMember.getId(), orderNo);
-        List<CreateProdOrderDetailDto> prodOrderDetailDtos = createOrderRequest.toProdOrderDetailDtos();
+        Member member = memberRepository.findByEmail("hong@email.com").orElseThrow(EntityNotFoundException::new);
+        Address address = addressRepository.findByMemberId(member.getId()).get(0);
+        CreateOrderDto createOrderDto = createDto(member, address);
 
         //when
-        createOrderService.create(prodOrderDto, prodOrderDetailDtos);
-        List<ProdOrderDetail> allOrders = orderDetailRepository.findAll();
+        createOrderService.create(createOrderDto);
+        ProdOrder order = orderRepository.findByOrderNo(createOrderDto.getOrderNo());
 
         //then
-        assertThat(allOrders).hasSize(3);
-        assertThat(allOrders)
-                .map(o -> o.getProduct().getName())
-                .containsExactlyInAnyOrderElementsOf(List.of("가방", "티비", "워치"));
+        assertThat(order.getMember().getId()).isEqualTo(member.getId());
+        assertThat(order.getAddress()).isEqualTo(address);
+        assertThat(order.getOrderName()).isEqualTo("가방 외 2건");
+        assertThat(order.getOrderNo()).isEqualTo("aaaa-aaaa-aaaa");
+        assertThat(order.getTotalPrice()).isEqualTo(createOrderDto.getTotalOrderPrice());
+        assertThat(order.getRealPrice()).isEqualTo(createOrderDto.getRealOrderPrice());
     }
+
+    private static long getTotalCouponPrice(List<Coupon> coupons) {
+
+        return coupons.stream().mapToLong(Coupon::getPrice).sum();
+    }
+
+    private long getTotalOrderPrice(List<ProductValue> productValues) {
+
+        return productValues.stream().mapToLong(p ->
+                productRepository.findById(p.getProductId()).getPrice() * p.getQuantity()
+        ).sum();
+    }
+
+    @DisplayName("주문 생성시 ProdOrderDetail 을 생성 한다.")
+    @Test
+    void CreateProdOrderDetail(){
+
+        //given
+        Member member = memberRepository.findByEmail("hong@email.com").orElseThrow(EntityNotFoundException::new);
+        Address address = addressRepository.findByMemberId(member.getId()).get(0);
+        CreateOrderDto createOrderDto = createDto(member, address);
+
+        //when
+        createOrderService.create(createOrderDto);
+        List<ProdOrderDetail> orderDetails = orderDetailRepository.findByOrderNo(createOrderDto.getOrderNo());
+
+        //then
+        assertThat(orderDetails).hasSize(3);
+
+        for (int i = 0; i < orderDetails.size(); i++) {
+            assertThat(orderDetails.get(i).getProduct()).isEqualTo(productRepository.findById(createOrderDto.getProductValues().get(i).getProductId()));
+            assertThat(orderDetails.get(i).getOrderNo()).isEqualTo(createOrderDto.getOrderNo());
+            assertThat(orderDetails.get(i).getQuantity()).isEqualTo(createOrderDto.getProductValues().get(i).getQuantity());
+            assertThat(orderDetails.get(i).getPrice()).isEqualTo(productRepository.findById(createOrderDto.getProductValues().get(i).getProductId()).getPrice());
+            assertThat(orderDetails.get(i).getStatusCode()).isEqualTo(StatusCodeType.ORDER_INIT.getCode());
+        }
+    }
+
+    @DisplayName("ProdOrder 와 ProdOrderDetail 이 서로 연관관계를 맺어야한다")
+    @Test
+    void mappingProdOrderWithProdOrderDetail(){
+
+        //given
+        Member member = memberRepository.findByEmail("hong@email.com").orElseThrow(EntityNotFoundException::new);
+        Address address = addressRepository.findByMemberId(member.getId()).get(0);
+        CreateOrderDto createOrderDto = createDto(member, address);
+
+        //when
+        createOrderService.create(createOrderDto);
+        List<ProdOrderDetail> orderDetails = orderDetailRepository.findByOrderNo(createOrderDto.getOrderNo());
+        ProdOrder order = orderRepository.findByOrderNo(createOrderDto.getOrderNo());
+
+        //then
+        List<ProdOrderDetail> actualList = order.getProdOrderDetails();
+        Assertions.assertThat(actualList).containsExactlyInAnyOrderElementsOf(orderDetails);
+
+        for (ProdOrderDetail orderDetail : actualList) {
+            assertThat(orderDetail.getProdOrder()).isEqualTo(order);
+        }
+    }
+
+    private CreateOrderDto createDto(Member member, Address address) {
+
+        List<Coupon> coupons = couponRepository.findAll();
+        List<Product> products = productRepository.findAll();
+
+        ProductValue productValue1 = ProductValue.builder()
+                .productId(coupons.get(0).getProduct().getId())
+                .couponId(coupons.get(0).getId())
+                .quantity(1L)
+                .build();
+
+        ProductValue productValue2 = ProductValue.builder()
+                .productId(coupons.get(1).getProduct().getId())
+                .couponId(coupons.get(1).getId())
+                .quantity(2L)
+                .build();
+
+        ProductValue productValue3 = ProductValue.builder()
+                .productId(products.get(2).getId())
+                .quantity(3L)
+                .build();
+
+        List<ProductValue> productValues = List.of(productValue1, productValue2, productValue3);
+
+        Long totalOrderPrice = getTotalOrderPrice(productValues);
+        Long totalCouponPrice = getTotalCouponPrice(coupons);
+
+        Long realOrderPrice = totalOrderPrice - totalCouponPrice;
+
+        return CreateOrderDto.builder()
+                .memberId(member.getId())
+                .addressId(address.getId())
+                .orderName("가방 외 2건")
+                .orderNo("aaaa-aaaa-aaaa")
+                .totalOrderPrice(totalOrderPrice)
+                .realOrderPrice(realOrderPrice)
+                .productValues(productValues)
+                .build();
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.objects.marketbridge.global.config;
 
-import com.objects.marketbridge.global.security.jwt.JwtAuthenticationFilter;
+import com.objects.marketbridge.global.security.filter.JwtAuthenticationFilter;
 import com.objects.marketbridge.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +46,7 @@ public class SpringSecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(configurer-> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/member/test").hasAuthority("USER"))
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/member/test", "/orders/checkout").hasAuthority("USER"))
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class)

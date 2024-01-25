@@ -1,20 +1,26 @@
 package com.objects.marketbridge.domain.order.controller.response;
 
-import com.objects.marketbridge.domain.model.AddressValue;
+import com.objects.marketbridge.model.AddressValue;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CheckoutResponse {
-    // 이름, 배송지, 연락처, 보유캐쉬
-    List<AddressValue> addressList;
-    Long pointBalance;
+    // 배송지 정보
+    AddressValue address;
 
     @Builder
-    public CheckoutResponse(List<AddressValue> addressList, Long pointBalance) {
-        this.addressList = addressList;
-        this.pointBalance = pointBalance;
+    public CheckoutResponse(AddressValue address) {
+        this.address = address;
     }
+
+    public static CheckoutResponse from(AddressValue address) {
+        return CheckoutResponse.builder()
+                .address(address)
+                .build();
+    }
+
 }
