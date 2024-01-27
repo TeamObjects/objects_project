@@ -1,8 +1,8 @@
 package com.objects.marketbridge.order.controller.response;
 
-import com.objects.marketbridge.order.domain.Order;
-import com.objects.marketbridge.order.domain.OrderDetail;
-import com.objects.marketbridge.order.payment.domain.Payment;
+import com.objects.marketbridge.common.infra.entity.OrderEntity;
+import com.objects.marketbridge.common.infra.entity.OrderDetailEntity;
+import com.objects.marketbridge.common.infra.entity.PaymentEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,14 +32,14 @@ public class OrderCancelReturnDetailResponse {
         this.cancelRefundInfoResponse = cancelRefundInfoResponse;
     }
 
-    public static OrderCancelReturnDetailResponse of(Order order, List<OrderDetail> orderDetails, Payment payment) {
+    public static OrderCancelReturnDetailResponse of(OrderEntity orderEntity, List<OrderDetailEntity> orderDetailEntities, PaymentEntity paymentEntity) {
         return OrderCancelReturnDetailResponse.builder()
-                .orderDate(order.getCreatedAt())
-                .cancelDate(order.getUpdatedAt())
-                .orderNo(order.getOrderNo())
-                .cancelReason(orderDetails.get(0).getReason())
+                .orderDate(orderEntity.getCreatedAt())
+                .cancelDate(orderEntity.getUpdatedAt())
+                .orderNo(orderEntity.getOrderNo())
+                .cancelReason(orderDetailEntities.get(0).getReason())
                 .productResponseList(
-                        orderDetails.stream()
+                        orderDetailEntities.stream()
                         .map(ProductResponse::of)
                         .toList()
                 )
@@ -48,12 +48,12 @@ public class OrderCancelReturnDetailResponse {
                                 .refundFee(0L)
                                 .deliveryFee(0L)
                                 .discountPrice(
-                                        orderDetails.stream()
+                                        orderDetailEntities.stream()
                                         .mapToLong(od -> od.getCoupon().getPrice())
                                         .sum()
                                 )
-                                .totalPrice(orderDetails.stream()
-                                        .mapToLong(OrderDetail::getPrice)
+                                .totalPrice(orderDetailEntities.stream()
+                                        .mapToLong(OrderDetailEntity::getPrice)
                                         .sum()
                                 )
                                 .build()

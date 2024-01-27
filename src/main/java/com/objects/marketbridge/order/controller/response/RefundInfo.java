@@ -1,6 +1,6 @@
 package com.objects.marketbridge.order.controller.response;
 
-import com.objects.marketbridge.order.payment.dto.RefundDto;
+import com.objects.marketbridge.order.dto.RefundDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

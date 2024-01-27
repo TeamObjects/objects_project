@@ -1,7 +1,7 @@
 package com.objects.marketbridge.order.controller.response;
 
-import com.objects.marketbridge.order.domain.Order;
-import com.objects.marketbridge.order.domain.OrderDetail;
+import com.objects.marketbridge.common.infra.entity.OrderEntity;
+import com.objects.marketbridge.common.infra.entity.OrderDetailEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,18 +22,18 @@ public class OrderCancelResponse {
         this.cancelRefundInfoResponse = cancelRefundInfoResponse;
     }
 
-    public static OrderCancelResponse of(List<OrderDetail> orderDetails, Order order) {
+    public static OrderCancelResponse of(List<OrderDetailEntity> orderDetailEntities, OrderEntity orderEntity) {
         return OrderCancelResponse.builder()
-                .productResponses(orderDetails.stream()
+                .productResponses(orderDetailEntities.stream()
                         .map(ProductInfoResponse::of)
                         .collect(Collectors.toList())
                 )
                 .cancelRefundInfoResponse(CancelRefundInfoResponse.builder()
                         .refundFee(0L)
                         .deliveryFee(0L) // TODO 주문에서 배송비 가져오기
-                        .discountPrice(order.getTotalUsedCouponPrice()) // TODO 할인금액 쿠폰만 가능?
-                        .totalPrice(orderDetails.stream()
-                                .mapToLong(OrderDetail::getPrice)
+                        .discountPrice(orderEntity.getTotalUsedCouponPrice()) // TODO 할인금액 쿠폰만 가능?
+                        .totalPrice(orderDetailEntities.stream()
+                                .mapToLong(OrderDetailEntity::getPrice)
                                 .sum()
                         )
                         .build())

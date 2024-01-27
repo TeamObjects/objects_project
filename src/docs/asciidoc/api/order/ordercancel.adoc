@@ -1,8 +1,8 @@
 ==== *주문 취소 요청*
 
 .*HTTP Request*
-include::{snippets}/order-cancel-request/http-request.adoc[]
+include::{snippets}/orderEntity-cancel-request/http-request.adoc[]
 
 .*HTTP Response*
-include::{snippets}/order-cancel-request/http-response.adoc[]
-include::{snippets}/order-cancel-request/response-fields.adoc[]
+include::{snippets}/orderEntity-cancel-request/http-response.adoc[]
+include::{snippets}/orderEntity-cancel-request/response-fields.adoc[]

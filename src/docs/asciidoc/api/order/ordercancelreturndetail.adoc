@@ -1,9 +1,9 @@
-[[order-cancel-return-detail]]
+[[orderEntity-cancel-return-detail]]
 === 반품/취소 주문 상세
 
 ==== HTTP Request
-include::{snippets}/order-cancel-return-detail/http-request.adoc[]
+include::{snippets}/orderEntity-cancel-return-detail/http-request.adoc[]
 
 ==== HTTP Response
-include::{snippets}/order-cancel-return-detail/http-response.adoc[]
-include::{snippets}/order-cancel-return-detail/response-fields.adoc[]
+include::{snippets}/orderEntity-cancel-return-detail/http-response.adoc[]
+include::{snippets}/orderEntity-cancel-return-detail/response-fields.adoc[]

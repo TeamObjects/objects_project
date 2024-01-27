@@ -26,7 +26,7 @@ truncate table member_coupon;
 
 truncate table option_category;
 
-truncate table payment;
+truncate table paymentEntity;
 
 truncate table point;
 
@@ -34,7 +34,7 @@ truncate table prod_option;
 
 truncate table options;
 
-truncate table order;
+truncate table orderEntity;
 
 truncate table order_detail;
 

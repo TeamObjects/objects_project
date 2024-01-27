@@ -1,15 +1,15 @@
 package com.objects.marketbridge.order.controller;
 
+import com.objects.marketbridge.common.domain.dto.kakao.KakaoPayReadyRequest;
+import com.objects.marketbridge.common.domain.dto.kakao.KakaoPayReadyResponse;
 import com.objects.marketbridge.common.infra.entity.AddressEntity;
-import com.objects.marketbridge.member.repository.MemberRepository;
+import com.objects.marketbridge.common.service.KakaoPayService;
+import com.objects.marketbridge.member.service.port.MemberRepository;
 import com.objects.marketbridge.order.controller.request.CreateOrderRequest;
 import com.objects.marketbridge.order.controller.response.CheckoutResponse;
-import com.objects.marketbridge.order.controller.response.KakaoPayReadyResponse;
 import com.objects.marketbridge.order.dto.CreateOrderDto;
-import com.objects.marketbridge.order.dto.KakaoPayReadyRequest;
 import com.objects.marketbridge.order.service.CreateOrderService;
-import com.objects.marketbridge.order.service.KakaoPayReadyService;
-import com.objects.marketbridge.order.payment.config.KakaoPayConfig;
+import com.objects.marketbridge.common.config.KakaoPayConfig;
 import com.objects.marketbridge.common.interceptor.ApiResponse;
 import com.objects.marketbridge.common.interceptor.error.CustomLogicException;
 import com.objects.marketbridge.common.security.annotation.AuthMemberId;
@@ -35,7 +35,7 @@ public class OrderController {
     private final MemberRepository memberRepository;
     private final CreateOrderService createOrderService;
     private final KakaoPayConfig kakaoPayConfig;
-    private final KakaoPayReadyService kakaoPayReadyService;
+    private final KakaoPayService kakaoPayService;
 
     @GetMapping("/orders/checkout")
     public ApiResponse<CheckoutResponse> getCheckout(
@@ -68,7 +68,7 @@ public class OrderController {
             @Valid @RequestBody CreateOrderRequest request) {
 
         // 1. kakaoPaymentReadyService 호출
-        KakaoPayReadyResponse response = kakaoPayReadyService.execute(createKakaoReadyRequest(request, memberId));
+        KakaoPayReadyResponse response = kakaoPayService.ready(createKakaoReadyRequest(request, memberId));
         String tid = response.getTid();
 
         // 2. 주문 생성
@@ -83,10 +83,10 @@ public class OrderController {
     }
     private KakaoPayReadyRequest createKakaoReadyRequest(CreateOrderRequest request, Long memberId) {
 
-        String cid = kakaoPayConfig.getCid();
+        String cid = KakaoPayConfig.ONE_TIME_CID;
         String cancelUrl = kakaoPayConfig.getCancelUrl();
         String failUrl = kakaoPayConfig.getFailUrl();
-        String approvalUrl = kakaoPayConfig.getApprovalUrl();
+        String approvalUrl = kakaoPayConfig.createApprovalUrl("/orders/checkout");
 
         return request.toKakaoReadyRequest(memberId, cid, approvalUrl, failUrl, cancelUrl);
     }

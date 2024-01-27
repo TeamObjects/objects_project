@@ -1,6 +1,6 @@
 package com.objects.marketbridge.domain.order.service;
 
-import com.objects.marketbridge.order.payment.config.KakaoPayConfig;
+import com.objects.marketbridge.common.config.KakaoPayConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class KakaoPayReadyServiceTest {
 
-    @Autowired KakaoPayConfig kakaoPayConfig;
+    @Autowired
+    KakaoPayConfig kakaoPayConfigConfig;
 
 
 

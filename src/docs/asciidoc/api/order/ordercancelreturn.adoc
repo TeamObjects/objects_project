@@ -1,9 +1,9 @@
 ==== *주문 취소*
 
 .*HTTP Request*
-include::{snippets}/order-cancel-return/http-request.adoc[]
-include::{snippets}/order-cancel-return/request-fields.adoc[]
+include::{snippets}/orderEntity-cancel-return/http-request.adoc[]
+include::{snippets}/orderEntity-cancel-return/request-fields.adoc[]
 
 .*HTTP Response*
-include::{snippets}/order-cancel-return/http-response.adoc[]
-include::{snippets}/order-cancel-return/response-fields.adoc[]
+include::{snippets}/orderEntity-cancel-return/http-response.adoc[]
+include::{snippets}/orderEntity-cancel-return/response-fields.adoc[]

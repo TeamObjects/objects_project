@@ -194,9 +194,9 @@ CREATE TABLE status_code (
                                deleted_at	timestamp	
 );
 
-DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS orderEntities;
 
-CREATE TABLE orders (
+CREATE TABLE orderEntities (
                               order_id	bigint auto_increment
                                   primary key,
 
@@ -236,9 +236,9 @@ CREATE TABLE order_detail (
                                      deleted_at	timestamp	
 );
 
-DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS paymentEntity;
 
-CREATE TABLE payment (
+CREATE TABLE paymentEntity (
                          payment_id	bigint auto_increment
                              primary key,
 

@@ -1,6 +1,6 @@
 package com.objects.marketbridge.order.controller.response;
 
-import com.objects.marketbridge.order.domain.OrderDetail;
+import com.objects.marketbridge.common.infra.entity.OrderDetailEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +23,12 @@ public class ProductInfoResponse {
         this.image = image;
     }
 
-    public static ProductInfoResponse of(OrderDetail orderDetail) {
+    public static ProductInfoResponse of(OrderDetailEntity orderDetailEntity) {
         return ProductInfoResponse.builder()
-                .quantity(orderDetail.getQuantity())
-                .name(orderDetail.getProduct().getName())
-                .price(orderDetail.getProduct().getPrice())
-                .image(orderDetail.getProduct().getThumbImg())
+                .quantity(orderDetailEntity.getQuantity())
+                .name(orderDetailEntity.getProduct().getName())
+                .price(orderDetailEntity.getProduct().getPrice())
+                .image(orderDetailEntity.getProduct().getThumbImg())
                 .build();
     }
 

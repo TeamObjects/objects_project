@@ -1,21 +1,21 @@
 package com.objects.marketbridge.common.infra.repository;
 
-import com.objects.marketbridge.order.domain.Order;
+import com.objects.marketbridge.common.infra.entity.OrderEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
-public interface OrderJpaRepository extends JpaRepository<Order, Long> {
+public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
 
     @EntityGraph(attributePaths = "orderDetails.product")
-    @Query("SELECT o FROM Order o LEFT JOIN FETCH o.orderDetails od LEFT JOIN FETCH od.product WHERE o.id = :orderId")
-    Optional<Order> findWithOrderDetailsAndProduct(@Param("orderId") Long orderId);
+    @Query("SELECT o FROM OrderEntity o LEFT JOIN FETCH o.orderDetails od LEFT JOIN FETCH od.product WHERE o.id = :orderId")
+    Optional<OrderEntity> findWithOrderDetailsAndProduct(@Param("orderId") Long orderId);
 
-    Optional<Order> findByOrderNo(String orderNo);
+    Optional<OrderEntity> findByOrderNo(String orderNo);
 
-    Order findByTid(String tid);
+    OrderEntity findByTid(String tid);
 
     void deleteByOrderNo(String orderNo);
 

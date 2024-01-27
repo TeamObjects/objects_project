@@ -1,5 +1,6 @@
 package com.objects.marketbridge.common.infra.entity;
 
+import com.objects.marketbridge.member.dto.AddressValue;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

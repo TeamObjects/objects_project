@@ -4,6 +4,7 @@ import com.objects.marketbridge.common.infra.entity.AddressEntity;
 import com.objects.marketbridge.common.infra.entity.MemberEntity;
 import com.objects.marketbridge.common.infra.repository.MemberJpaRepository;
 import com.objects.marketbridge.common.infra.repository.AddressJpaRepository;
+import com.objects.marketbridge.member.service.port.MemberRepository;
 import com.objects.marketbridge.model.QAddress;
 import com.objects.marketbridge.model.QMember;
 import com.objects.marketbridge.model.QPoint;

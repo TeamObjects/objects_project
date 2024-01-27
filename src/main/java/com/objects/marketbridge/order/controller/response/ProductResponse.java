@@ -1,6 +1,6 @@
 package com.objects.marketbridge.order.controller.response;
 
-import com.objects.marketbridge.order.domain.OrderDetail;
+import com.objects.marketbridge.common.infra.entity.OrderDetailEntity;
 import com.objects.marketbridge.common.infra.entity.ProductEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,13 +34,13 @@ public class ProductResponse {
                 .build();
     }
 
-    public static ProductResponse of(OrderDetail orderDetail) {
+    public static ProductResponse of(OrderDetailEntity orderDetailEntity) {
         return ProductResponse.builder()
-                .productId(orderDetail.getProduct().getId())
-                .productNo(orderDetail.getProduct().getProductNo())
-                .name(orderDetail.getProduct().getName())
-                .price(orderDetail.getProduct().getPrice())
-                .quantity(orderDetail.getQuantity())
+                .productId(orderDetailEntity.getProduct().getId())
+                .productNo(orderDetailEntity.getProduct().getProductNo())
+                .name(orderDetailEntity.getProduct().getName())
+                .price(orderDetailEntity.getProduct().getPrice())
+                .quantity(orderDetailEntity.getQuantity())
                 .build();
     }
 }

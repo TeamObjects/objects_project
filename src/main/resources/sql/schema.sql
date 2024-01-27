@@ -237,7 +237,7 @@ create table if not exists MarketBridge.option_category
 
 );
 
-create table if not exists MarketBridge.payment
+create table if not exists MarketBridge.paymentEntity
 (
     payment_id    bigint auto_increment
         primary key,
@@ -286,7 +286,7 @@ create table if not exists MarketBridge.prod_option
     deleted_at         datetime(6)  null
 );
 
-create table if not exists MarketBridge.order
+create table if not exists MarketBridge.orderEntity
 (
     order_id  bigint auto_increment
         primary key,

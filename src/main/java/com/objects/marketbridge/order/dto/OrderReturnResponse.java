@@ -1,7 +1,7 @@
 package com.objects.marketbridge.order.dto;
 
 import com.objects.marketbridge.order.controller.response.ProductInfoResponse;
-import com.objects.marketbridge.order.domain.OrderDetail;
+import com.objects.marketbridge.common.infra.entity.OrderDetailEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,17 +22,17 @@ public class OrderReturnResponse {
         this.returnRefundInfoResponse = returnRefundInfoResponse;
     }
 
-    public static OrderReturnResponse of(List<OrderDetail> orderDetails) {
+    public static OrderReturnResponse of(List<OrderDetailEntity> orderDetailEntities) {
         return OrderReturnResponse.builder()
-                .productResponses(orderDetails.stream()
+                .productResponses(orderDetailEntities.stream()
                         .map(ProductInfoResponse::of)
                         .collect(Collectors.toList())
                 )
                 .returnRefundInfoResponse(
                         ReturnRefundInfoResponse.builder()
                                 .productPrice(
-                                        orderDetails.stream()
-                                                .mapToLong(OrderDetail::getPrice)
+                                        orderDetailEntities.stream()
+                                                .mapToLong(OrderDetailEntity::getPrice)
                                                 .sum()
                                 )
                                 .deliveryFee(0L)

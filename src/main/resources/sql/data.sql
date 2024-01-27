@@ -36,7 +36,7 @@ VALUES
     (2, 'Facebook', 'Silver', 'user2@example.com', 'password456', 'User2', '987654321', FALSE, TRUE);
 
 -- Order
-INSERT INTO order (order_id, member_id, address_id, order_name, order_no, total_price, point_rate, saved_point, delivered_date)
+INSERT INTO orderEntity (order_id, member_id, address_id, order_name, order_no, total_price, point_rate, saved_point, delivered_date)
 VALUES
     (1, 1, 1, 'Order1', '123ABC', 550000, 5, 5000, '2024-01-16 12:30:00'),
     (2, 2, 2, 'Order2', '456DEF', 35000, 3, 1000, '2024-01-17 09:00:00');

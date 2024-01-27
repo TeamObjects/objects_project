@@ -1,6 +1,5 @@
 package com.objects.marketbridge.common.infra.entity;
 
-import com.objects.marketbridge.order.domain.OrderDetail;
 import com.objects.marketbridge.common.interceptor.error.CustomLogicException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,7 +27,7 @@ public class ProductEntity extends BaseEntity{
     private CategoryEntity category;
 
     @OneToMany(mappedBy = "product")
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+    private List<OrderDetailEntity> orderDetailEntities = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "product")
 //    private List<ProdOption> prodOptions = new ArrayList<>();
@@ -64,9 +63,9 @@ public class ProductEntity extends BaseEntity{
         this.stock = stock;
     }
 
-    public void addOrderDetail(OrderDetail orderDetail) {
-        orderDetails.add(orderDetail);
-        orderDetail.setProduct(this);
+    public void addOrderDetail(OrderDetailEntity orderDetailEntity) {
+        orderDetailEntities.add(orderDetailEntity);
+        orderDetailEntity.setProduct(this);
     }
 
     public void increase(Long quantity) {

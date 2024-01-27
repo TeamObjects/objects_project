@@ -1,7 +1,7 @@
 package com.objects.marketbridge.order.controller.response;
 
-import com.objects.marketbridge.order.domain.Order;
-import com.objects.marketbridge.order.payment.dto.RefundDto;
+import com.objects.marketbridge.common.infra.entity.OrderEntity;
+import com.objects.marketbridge.order.dto.RefundDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +31,15 @@ public class OrderCancelReturnResponse {
         this.cancelledItems = cancelledItems;
     }
 
-    public static OrderCancelReturnResponse of(Order order, RefundDto refundDto) {
+    public static OrderCancelReturnResponse of(OrderEntity orderEntity, RefundDto refundDto) {
         return OrderCancelReturnResponse.builder()
-                .orderId(order.getId())
-                .orderNumber(order.getOrderNo())
-                .totalPrice(order.getTotalPrice())
-                .cancellationDate(order.getUpdatedAt())
+                .orderId(orderEntity.getId())
+                .orderNumber(orderEntity.getOrderNo())
+                .totalPrice(orderEntity.getTotalPrice())
+                .cancellationDate(orderEntity.getUpdatedAt())
                 .refundInfo(RefundInfo.of(refundDto))
                 .cancelledItems(
-                        order.getOrderDetails().stream()
+                        orderEntity.getOrderDetailEntities().stream()
                                 .map(orderDetail -> ProductResponse.of(orderDetail.getProduct(), orderDetail.getQuantity()))
                                 .collect(Collectors.toList())
                 )

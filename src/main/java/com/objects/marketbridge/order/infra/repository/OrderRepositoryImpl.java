@@ -1,7 +1,7 @@
 package com.objects.marketbridge.order.infra.repository;
 
+import com.objects.marketbridge.common.infra.entity.OrderEntity;
 import com.objects.marketbridge.common.infra.repository.OrderJpaRepository;
-import com.objects.marketbridge.order.domain.Order;
 import com.objects.marketbridge.order.service.port.OrderRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -28,22 +28,22 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findById(Long orderId) {
+    public Optional<OrderEntity> findById(Long orderId) {
         return orderJpaRepository.findById(orderId);
     }
 
     @Override
-    public Order findByOrderNo(String orderNo) {
+    public OrderEntity findByOrderNo(String orderNo) {
         return orderJpaRepository.findByOrderNo(orderNo).orElseThrow(() -> new EntityNotFoundException("엔티티가 존재하지 않습니다"));
     }
 
     @Override
-    public Order save(Order order) {
-        return orderJpaRepository.save(order);
+    public OrderEntity save(OrderEntity orderEntity) {
+        return orderJpaRepository.save(orderEntity);
     }
 
     @Override
-    public Order findWithOrderDetailsAndProduct(Long orderId) {
+    public OrderEntity findWithOrderDetailsAndProduct(Long orderId) {
         return orderJpaRepository.findWithOrderDetailsAndProduct(orderId).orElseThrow(EntityNotFoundException::new);
     }
 
@@ -53,7 +53,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findOrderWithDetailsAndProduct(Long orderId) {
+    public Optional<OrderEntity> findOrderWithDetailsAndProduct(Long orderId) {
         return Optional.ofNullable(
                 queryFactory
                         .selectFrom(order)
@@ -66,24 +66,24 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order findByTid(String tid) {
+    public OrderEntity findByTid(String tid) {
         return orderJpaRepository.findByTid(tid);
     }
 
     @Override
-    public List<Order> findDistinctWithDetailsByMemberId(Long memberId) {
+    public List<OrderEntity> findDistinctWithDetailsByMemberId(Long memberId) {
         return null;
     }
 
     @Override
-    public Order findByIdWithOrderDetail(Long orderId) {
+    public OrderEntity findByIdWithOrderDetail(Long orderId) {
         return null;
     }
 
 
     @Override
-    public void saveAll(List<Order> orders) {
-        orderJpaRepository.saveAll(orders);
+    public void saveAll(List<OrderEntity> orderEntities) {
+        orderJpaRepository.saveAll(orderEntities);
     }
 
     @Override

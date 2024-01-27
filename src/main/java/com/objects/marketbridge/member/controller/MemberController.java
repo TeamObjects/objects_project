@@ -59,7 +59,29 @@ public class MemberController {
         return ApiResponse.ok(jwtTokenDto);
     }
 
-    @GetMapping("/membership/{id}")
+    @PostMapping("/membership/{id}")
+    public void createMembership(@PathVariable Long id){
+        // 서비스-레파지토리
+        //서비스는 레파지토리에 요청 보내고, dto 매핑하고
+        // 0. 결제 진행 -> paymentService ready -> pg_토큰 값 내려줌
+        // approve url -> "/membership/approve/{pg_token}"
+
+
+    }
+
+    @PostMapping("/membership/approve/{}")
+    public void approveMembership(@PathVariable String id, @RequestParam String pgToken){
+        // tid 조회 해서
+        //승인하기
+
+        // 1. member -> wow변경 update
+        //2. 구독 결제 정보 저장 -> 구독 결제 카드 정보 create sid, tid
+        //3. 구독 정보 저장 -> 매월 몇일 결제, 금액 create
+        // -> 트랜젝션
+    }
+
+    //구독해제
+    @PatchMapping("/membership/{id}")
     public void changeMembership(@PathVariable Long id){
         memberService.changeMemberShip(id);
     }

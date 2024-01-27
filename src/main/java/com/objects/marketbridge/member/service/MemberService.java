@@ -1,17 +1,17 @@
 package com.objects.marketbridge.member.service;
 
+import com.objects.marketbridge.common.service.KakaoPayService;
 import com.objects.marketbridge.member.dto.CheckedResultDto;
 import com.objects.marketbridge.member.dto.FindPointDto;
 import com.objects.marketbridge.member.dto.SignInDto;
 import com.objects.marketbridge.member.dto.SignUpDto;
-import com.objects.marketbridge.member.repository.MemberRepository;
+import com.objects.marketbridge.member.service.port.MemberRepository;
 import com.objects.marketbridge.common.infra.entity.MemberEntity;
 import com.objects.marketbridge.common.security.dto.JwtTokenDto;
 import com.objects.marketbridge.common.security.jwt.JwtTokenProvider;
 import com.objects.marketbridge.common.domain.enums.Membership;
 import com.objects.marketbridge.common.infra.entity.PointEntity;
 import com.objects.marketbridge.common.security.user.CustomUserDetails;
-import com.objects.marketbridge.member.repository.MemberRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -32,6 +32,7 @@ public class MemberService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final KakaoPayService kakaoPayService;
 
     public CheckedResultDto isDuplicateEmail(String email){
         boolean isDuplicateEmail = memberRepository.findByEmail(email).isPresent();
@@ -87,5 +88,10 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with id: " + id));
 
         return PointEntity.toDto(findMemberWithPoint);
+    }
+
+    public void createMembership() {
+
+
     }
 }

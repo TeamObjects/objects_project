@@ -6,7 +6,7 @@ import com.objects.marketbridge.order.controller.response.OrderDetailResponse;
 import com.objects.marketbridge.domain.order.controller.response.QOrderCancelReturnListResponse;
 import com.objects.marketbridge.domain.order.controller.response.QOrderDetailResponse;
 import com.objects.marketbridge.order.service.port.OrderDtoRepository;
-import com.objects.marketbridge.order.domain.StatusCodeType;
+import com.objects.marketbridge.common.domain.enums.StatusCodeType;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

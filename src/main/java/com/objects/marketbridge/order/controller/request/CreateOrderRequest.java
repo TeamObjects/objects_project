@@ -1,7 +1,6 @@
 package com.objects.marketbridge.order.controller.request;
 
 import com.objects.marketbridge.order.dto.CreateOrderDto;
-import com.objects.marketbridge.order.dto.KakaoPayReadyRequest;
 import com.objects.marketbridge.order.domain.ProductValue;
 import lombok.*;
 

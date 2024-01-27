@@ -53,28 +53,28 @@ include::api/member/reissue.adoc[]
 == *주문/결제*
 >>>>>>> feature/user
 
-include::api/order/ordercancelreturn.adoc[]
+include::api/orderEntity/ordercancelreturn.adoc[]
 {empty}
 {empty}
 
-include::api/order/ordercancel.adoc[]
+include::api/orderEntity/ordercancel.adoc[]
 {empty}
 {empty}
 
-include::api/order/orderreturn.adoc[]
+include::api/orderEntity/orderreturn.adoc[]
 <<<<<<< HEAD
-include::api/order/ordercancelreturnlist.adoc[]
-include::api/order/ordercancelreturndetail.adoc[]
+include::api/orderEntity/ordercancelreturnlist.adoc[]
+include::api/orderEntity/ordercancelreturndetail.adoc[]
 
 [[OrderCreate-API]]
 == OrderCreate API
 
-// include::api/order/ordercreate.adoc[]
+// include::api/orderEntity/ordercreate.adoc[]
 
 [[OrderCheckout-API]]
 == OrderCheckout API
 
-// include::api/order/ordercheckout.adoc[]
+// include::api/orderEntity/ordercheckout.adoc[]
 =======
 {empty}
 {empty}
@@ -83,4 +83,4 @@ include::api/order/ordercancelreturndetail.adoc[]
 // [[Order-API]]
 // == Order API
 //
-// include::api/order/ordercancel.adoc[]
+// include::api/orderEntity/ordercancel.adoc[]

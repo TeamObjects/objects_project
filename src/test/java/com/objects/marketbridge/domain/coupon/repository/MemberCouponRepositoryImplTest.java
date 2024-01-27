@@ -2,7 +2,7 @@ package com.objects.marketbridge.domain.coupon.repository;
 
 import com.objects.marketbridge.product.coupon.repository.CouponRepository;
 import com.objects.marketbridge.product.coupon.repository.MemberCouponRepository;
-import com.objects.marketbridge.member.repository.MemberRepository;
+import com.objects.marketbridge.member.service.port.MemberRepository;
 import com.objects.marketbridge.common.infra.entity.CouponEntity;
 import com.objects.marketbridge.common.infra.entity.MemberEntity;
 import com.objects.marketbridge.common.infra.entity.MemberCouponEntity;

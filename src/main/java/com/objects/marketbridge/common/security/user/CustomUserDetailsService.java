@@ -1,6 +1,6 @@
 package com.objects.marketbridge.common.security.user;
 
-import com.objects.marketbridge.member.repository.MemberRepository;
+import com.objects.marketbridge.member.service.port.MemberRepository;
 import com.objects.marketbridge.common.infra.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
