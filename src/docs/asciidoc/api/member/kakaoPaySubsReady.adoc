@@ -1,8 +1,0 @@
-==== *정기결제 0회차 준비*
-
-.*HTTP Request*
-include::{snippets}/kakaoPaySubs-ready/http-request.adoc[]
-
-.*HTTP Response*
-include::{snippets}/kakaoPaySubs-ready/http-response.adoc[]
-include::{snippets}/kakaoPaySubs-ready/response-fields.adoc[]

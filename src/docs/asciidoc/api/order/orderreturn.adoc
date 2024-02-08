@@ -1,8 +1,0 @@
-==== *반품 요청*
-
-.*HTTP Request*
-include::{snippets}/order-return-request/http-request.adoc[]
-
-.*HTTP Response*
-include::{snippets}/order-return-request/http-response.adoc[]
-include::{snippets}/order-return-request/response-fields.adoc[]
